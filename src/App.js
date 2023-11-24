@@ -1,31 +1,62 @@
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import axios from 'axios';
+import Header from './components/Header';
+import Mainboard from './components/Mainboard';
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPinterest } from '@fortawesome/free-brands-svg-icons';
-import Login from './Login/login';
+
 function App() {
+  const [pins, setNewPins] = useState([])
+  const getImages = (term) => {
+  return axios.get("https://api.unsplash.com//search/photos", {
+    params: { query: term },
+    headers: {
+      Authorization: "Client-ID Y2PGTILvwArhMr02w2yhJges8GixRuM4bs5_hyhtYAw",
+    },
+    
+  });}
+  const onSearchSubmit = (term) => {
+   getImages(term).then((res) => {
+   let results = res.data.results;
+   let newPins = [
+     ...results,
+     ...pins,
+   ]
+   newPins.sort(function(a,b){
+    return 0.5 - Math.random();
+   });
+   setNewPins(newPins);
+  });
+  };
+  
+    useEffect(() => {
+     const getNewPins = () => {
+   let promises = [];
+   let pinData = [];
+    let pins = ['Istanbul','cats','sky','lake','nature']
+    pins.forEach((pinTerm) => {
+    promises.push (
+    getImages(pinTerm).then((res) => {
+    let results = res.data.results;
+    pinData = pinData.concat(results);
+  
+    pinData.sort(function(a,b){
+      return 0.5 - Math.random();
+    });
+   })
+   );
+  });
+  Promise.all(promises).then(()=> {
+   setNewPins(pinData);
+   });
+   };
+    getNewPins();
+   }, []);
   return (
-    <Router>
-      <div className="app-background">
-        <nav className="app-nav">
-          <a href="/" className="nav-logo">
-            <FontAwesomeIcon icon={faPinterest} style={{ color: 'red' }} />
-          </a>
-          <a href="/" className="nav-logo">Pinterest</a>
-          <a href="/explore" className="nav-item">Explore</a>
-          <a href="/login" className="nav-item selected">Login</a>
-          <a href="/signup" className="nav-item">Sign up</a>
-        </nav>
-        <div className="overlay-text">Sign up to get your ideas</div>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          {/* Define other routes here */}
-        </Routes>
-      </div>
-    </Router> 
+  <div className="app">
+    <Header  onSubmit={onSearchSubmit}/>
+    <Mainboard  pins={pins}/>
+  </div>
   );
-}
-
-export default App;
+  }
+  export default App;
