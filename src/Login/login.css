@@ -1,9 +1,3 @@
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 
 .login-form form {
   display: flex;
@@ -15,15 +9,6 @@
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-.login-button {
-  background-color: #e60023;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 .alternative-login button {
@@ -45,3 +30,54 @@
   color: white;
   border: none;
 }
+
+.login-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.login-card {
+  margin-right: 10%;
+  padding: 3rem;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 40%;
+  width: 300px; 
+  display: flex;
+  flex-direction: column;
+}
+
+.facebook-login,
+.login-button,
+.google-login {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-bottom: 1rem; 
+}
+
+
+.login-button {
+  background-color: darkred;
+  padding-left: 43.7%;
+  padding-right: 43.7%;
+}
+
+input[type="email"],
+input[type="password"]{
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding-left: 25.7%;
+  padding-right: 25.7%;
+}
+
+
+

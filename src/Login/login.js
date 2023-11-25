@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginAction } from './actions'; 
+import { loginAction } from './actions';
 import './login.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // Redux state and dispatch
-  const authState = useSelector(state => state.auth); 
+  const authState = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const handleLogin = (e) => {
@@ -17,7 +17,7 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <div className="login-form">
+      <div className="login-card">
         <form onSubmit={handleLogin}>
           <input
             type="email"
@@ -35,10 +35,8 @@ export default function Login() {
           />
           <button type="submit" className="login-button">Log in</button>
         </form>
-        <div className="alternative-login">
-          <button className="facebook-login">Continue with Facebook</button>
-          <button className="google-login">Continue with Google</button>
-        </div>
+        <button className="facebook-login">Continue with Facebook</button>
+        <button className="google-login">Continue with Google</button>
       </div>
     </div>
   );
