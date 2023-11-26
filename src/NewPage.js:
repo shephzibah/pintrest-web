@@ -1,0 +1,32 @@
+import React, { useState, useEffect } from 'react';
+
+const topics = ['Beach', 'Mountains', 'Food', 'Travel', 'Animals'];
+
+const NewPage = ({ onSelectTopic }) => {
+  const [randomTopic, setRandomTopic] = useState('');
+
+  useEffect(() => {
+    // Generate a random topic when the component mounts
+    generateRandomTopic();
+  }, []);
+
+  const generateRandomTopic = () => {
+    const randomIndex = Math.floor(Math.random() * topics.length);
+    setRandomTopic(topics[randomIndex]);
+  };
+
+  const handleSelectTopic = () => {
+    onSelectTopic(randomTopic);
+  };
+
+  return (
+    <div>
+      <h1>Choose a Random Topic:</h1>
+      <p>{randomTopic}</p>
+      <button onClick={generateRandomTopic}>Generate New Topic</button>
+      <button onClick={handleSelectTopic}>Select Topic</button>
+    </div>
+  );
+};
+
+export default NewPage;
