@@ -4,14 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { registerAction } from './action';
 import './registration.css';
 
-const validUserRoles = ['user', 'seller'];
-
 export default function Registration() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userrole, setUserrole] = useState('');
+  const [userRole, setUserRole] = useState('');
 
   // Redux state and dispatch
   const authState = useSelector(state => state.auth);
@@ -20,33 +18,35 @@ export default function Registration() {
   const handleRegister = (e) => {
     e.preventDefault();
 
-    // Validate userrole
-    if (!validUserRoles.includes(userrole)) {
-      alert('Invalid userrole. Please choose "user" or "seller".');
+    // Validate user role
+    if (!userRole) {
+      alert('Please select a user role (User or Seller).');
       return;
     }
 
-    dispatch(registerAction({ firstName, lastName, email, password, userrole }));
+    dispatch(registerAction({ firstName, lastName, email, password, userRole }));
   };
 
   return (
-    <div className="registration-container">
-      <div className="registration-form">
+    <div className="login-container">
+      <div className="login-card registration-card">
         <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
+          <div className="name-inputs">
+            <input
+              type="text"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+          </div>
           <input
             type="email"
             placeholder="Email"
@@ -61,30 +61,36 @@ export default function Registration() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <div>
+          <div className="user-role-input">
             <label>
               <input
                 type="radio"
-                value="user"
-                checked={userrole === 'user'}
-                onChange={() => setUserrole('user')}
+                name="userRole"
+                value="User"
+                checked={userRole === 'User'}
+                onChange={() => setUserRole('User')}
+                required
               />
               User
             </label>
             <label>
               <input
                 type="radio"
-                value="seller"
-                checked={userrole === 'seller'}
-                onChange={() => setUserrole('seller')}
+                name="userRole"
+                value="Seller"
+                checked={userRole === 'Seller'}
+                onChange={() => setUserRole('Seller')}
+                required
               />
               Seller
             </label>
           </div>
-          <button type="submit" className="registration-button">Register</button>
+          <button type="submit" className="login-button registration-button">Register</button>
         </form>
+        <button className="facebook-login">Continue with Facebook</button>
+        <button className="google-login">Continue with Google</button>
         <div className="alternative-login">
-          <p>Already have an account? <a href="/login">Log in</a></p>
+          <p>Already registered? <a href="/login">Login</a></p>
         </div>
       </div>
     </div>
