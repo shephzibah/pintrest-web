@@ -1,0 +1,64 @@
+.registration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .registration-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+  }
+  
+  .registration-form input,
+  .registration-form select {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .registration-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .alternative-login {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .alternative-login p {
+    margin-bottom: 5px;
+  }
+  
+  .alternative-login a {
+    color: #4caf50;
+    text-decoration: none;
+  }
+  
+  .alternative-login button {
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .facebook-login {
+    background-color: #3b5998;
+    color: white;
+    border: none;
+    margin-bottom: 5px;
+  }
+  
+  .google-login {
+    background-color: #db4437;
+    color: white;
+    border: none;
+  }
+  
