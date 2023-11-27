@@ -9,7 +9,7 @@ export default function Registration() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userRole, setUserRole] = useState('');
+  const [isSeller, setIsSeller] = useState(false);
 
   // Redux state and dispatch
   const authState = useSelector(state => state.auth);
@@ -18,13 +18,7 @@ export default function Registration() {
   const handleRegister = (e) => {
     e.preventDefault();
 
-    // Validate user role
-    if (!userRole) {
-      alert('Please select a user role (User or Seller).');
-      return;
-    }
-
-    dispatch(registerAction({ firstName, lastName, email, password, userRole }));
+    dispatch(registerAction({ firstName, lastName, email, password, isSeller }));
   };
 
   return (
@@ -64,23 +58,9 @@ export default function Registration() {
           <div className="user-role-input">
             <label>
               <input
-                type="radio"
-                name="userRole"
-                value="User"
-                checked={userRole === 'User'}
-                onChange={() => setUserRole('User')}
-                required
-              />
-              User
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="userRole"
-                value="Seller"
-                checked={userRole === 'Seller'}
-                onChange={() => setUserRole('Seller')}
-                required
+                type="checkbox"
+                value={isSeller}
+                onChange={() => setIsSeller(!isSeller)}
               />
               Seller
             </label>
