@@ -1,0 +1,85 @@
+/* TopicSelector.css */
+
+.topic-selector {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .topic-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .topic-button {
+    background-color: #e0e0e0;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .topic-button:hover {
+    background-color: #c0c0c0;
+  }
+  /* TopicSelector.css */
+
+.topic-selector {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .topic-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .topic-button {
+    background-color: #e0e0e0;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .topic-button:hover {
+    background-color: #c0c0c0;
+  }
+  
+  .topic-button.selected {
+    background-color: #70db70; /* Green color for selected topics */
+  }
+  
+  .ok-button {
+    margin-top: 10px;
+    background-color: #70db70; /* Green color for the OK button */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .ok-button:hover {
+    background-color: #4caf50; /* Darker green color on hover */
+  }
+  
+  .topic-button.selected {
+    background-color: #70db70; /* Green color for selected topics */
+  }
+  
+  .ok-button {
+    margin-top: 10px;
+    background-color: #70db70; /* Green color for the OK button */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .ok-button:hover {
+    background-color: #4caf50; /* Darker green color on hover */
+  }
+  
