@@ -42,6 +42,7 @@
   background-image: url('./assets/backgroub-img.jpg');
   display: flex;
   min-height: 100vh;
+  font-weight: strong;
   height: 100vh;
   background-size: cover;
   background-position: center;
