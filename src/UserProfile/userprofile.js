@@ -6,8 +6,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import CreatedPins from './createdPins'; 
-import SavedPins from './savedPins'; 
+import UserPins from './userPins'
 
 function UserProfile() {
   const [userData, setUserData] = useState(null);
@@ -46,10 +45,10 @@ function UserProfile() {
             <Tab>Saved</Tab>
           </TabList>
           <TabPanel>
-            <CreatedPins />
+            <UserPins posts={userData.createdPosts} />
           </TabPanel>
           <TabPanel>
-            <SavedPins />
+            <UserPins posts={userData.savedPosts} />
           </TabPanel>
         </Tabs>
       </TabsContainer>

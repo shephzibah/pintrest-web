@@ -1,30 +1,53 @@
 {
-    "userId": "user123",
-    "name": "John Doe",
-    "followers": 5,
-    "following": 12,
-    "profilePicture": "https://images.unsplash.com/photo-1449614115178-cb924f730780?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy",
-    "posts": [
-      {
-        "id": 1,
-        "title": "Post 1",
-        "description": "Random post 1",
-        "image": "https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=1080&fit=max%22"
-      },
-      {
-        "id": 2,
-        "title": "Post 2",
-        "description": "Random post 2",
-        "image": "https://images.unsplash.com/photo-1423784346385-c1d4dac9893a"
-      },
-      {
-        "id": 3,
-        "title": "Post 3",
-        "description": "Random post 3",
-        "image": "https://images.unsplash.com/photo-1423784346385-c1d4dac9893a"
-      }
-    ]
-  }
-  
-
-  
+  "userId": "user123",
+  "name": "John Doe",
+  "followers": 5,
+  "following": 12,
+  "profilePicture": "https://images.unsplash.com/photo-1449614115178-cb924f730780?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy",
+  "savedPosts": [
+    {
+      "id": 1,
+      "title": "Post 1",
+      "description": "Random post 1",
+      "category": "category1",
+      "image": "https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=1080&fit=max%22"
+    },
+    {
+      "id": 2,
+      "title": "Post 2",
+      "description": "Random post 2",
+      "category": "category2",
+      "image": "https://images.unsplash.com/photo-1423784346385-c1d4dac9893a"
+    },
+    {
+      "id": 3,
+      "title": "Post 3",
+      "description": "Random post 3",
+      "category": "category3",
+      "image": "https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+    }
+  ],
+  "createdPosts": [
+    {
+      "id": 1,
+      "title": "Post 4",
+      "description": "Created post 1",
+      "category": "category1",
+      "image": "https://source.unsplash.com/WLUHO9A_xik/500x500&fit=max"
+    },
+    {
+      "id": 2,
+      "title": "Post 5",
+      "description": "Created post 2",
+      "category": "category2",
+      "image": "https://source.unsplash.com/TCpfPxKPOvk/500x500&fit=max"
+    },
+    {
+      "id": 3,
+      "title": "Post 6",
+      "description": "Created post 3",
+      "category": "category3",
+      "image": "https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+    }
+  ]
+}
