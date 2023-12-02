@@ -10,4 +10,3 @@ export const ActionTypes = {
       payload: { email, password },
     };
   };
-  

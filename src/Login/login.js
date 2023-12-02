@@ -5,6 +5,12 @@ import { useDispatch } from 'react-redux';
 import './login.css'; // Ensure the file name matches the casing
 import { useNavigate } from 'react-router-dom';
 
+import * as client from './service';
+
+// Toast Message
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,26 +22,31 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const response = await fetch('datasets/authorized_users.json');
-    if (!response.ok) {
-      setError(`HTTP error! status: ${response.status}`);
-      return;
-    }
-    const authorizedUsers = await response.json();
 
-    const userExists = authorizedUsers.find(user => user.email === email && user.password === password);
+    try {
+      const credentials = { email, password };
 
-    if (userExists) {
-      dispatch(loginAction(email, password)); // Dispatching login action to update Redux state
-      navigate('/mainboard'); 
-    } else {
-      setError('Invalid credentials');
+      const response = await client.loginUser(credentials);
+
+      dispatch(loginAction(credentials));
+      navigate('/mainboard');
+
+    } catch (error) {
+      toast.error("Invalid login credentials", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
   return (
     <div className="login-container">
+      <ToastContainer />
       {error && <p className="error-message">{error}</p>}
       <div className="login-card">
         <form onSubmit={handleLogin}>
