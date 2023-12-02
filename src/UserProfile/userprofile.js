@@ -35,8 +35,8 @@ function UserProfile() {
           <span>{userData.following} Following</span>
         </FollowInfo>
         <ButtonContainer>
-          <Button variant="outlined" color="primary">Share</Button>
-          <Button variant="outlined" color="primary">Edit Profile</Button>
+          <StyledButton variant="outlined" color="primary">Share</StyledButton>
+          <StyledButton variant="outlined" color="primary">Edit Profile</StyledButton>
         </ButtonContainer>
       </AvatarContainer>
       <TabsContainer>
@@ -58,11 +58,11 @@ function UserProfile() {
 }
 
 // Styled Components
+
 const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 15px;
   width: 100%;
 `;
 
@@ -73,37 +73,10 @@ const AvatarContainer = styled.div`
   margin-top: 15px;
 `;
 
-const StyledAvatar = styled(Avatar)`
-  width: 180px;  
-  height: 180px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const UserName = styled.h2`
-  font-weight: bold;
-  margin-top: 10px; // Adjust as needed for spacing
-  color: #333; // Use the color you prefer for the text
-  font-size: 1.5em; // Adjust the font size as needed
-`;
-
-
-const FollowInfo = styled.div`
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  margin: 20px 0;
-
-  span {
-    font-size: 1.2em;
-    color: #555;
-    margin: 0 10px;
-  }
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  
   gap: 10px;
   margin-bottom: 20px;
 
@@ -113,11 +86,46 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const StyledAvatar = styled(Avatar)`
+  width: 180px; 
+  height: 180px;
+  margin-top: 20px;
+  border: 2px solid white; 
+`;
+
+const UserName = styled.h2`
+  font-weight: bold;
+  font-size: 24px; 
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: black; 
+`;
+
+const FollowInfo = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 16px; 
+  color: grey; 
+  margin-bottom: 20px;
+`;
+
+const StyledButton = styled(Button)`
+  && {
+    margin: 5px;
+    border-radius: 24px;
+    border: 1px solid #efefef; 
+    color: black; 
+    font-weight: bold;
+    background-color: #efefef; 
+  }
+`;
+
 const TabsContainer = styled.div`
   width: 100%;
   
   .react-tabs__tab-list {
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #e60023;
     margin: 0;
     padding: 0;
     display: flex;
@@ -128,6 +136,7 @@ const TabsContainer = styled.div`
     list-style: none;
     padding: 10px 20px;
     cursor: pointer;
+    font-weight: bold;
     user-select: none;
     color: #555;
 
@@ -145,6 +154,7 @@ const TabsContainer = styled.div`
     }
   }
 `;
+
 
 
 export default UserProfile;
