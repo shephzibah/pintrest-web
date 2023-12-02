@@ -18,19 +18,19 @@
 
 .nav-icon {
   color: #e60023; 
-  margin-right: 0.5rem; 
+  margin-right: 0.01rem; 
   font-size: 2rem;
 }
 
 .brand-name {
   color: #e60023; 
-  font-weight: bold;
-  margin-left: 0.25rem; 
+  font-weight: 720; 
 }
 
 .nav-item {
   padding: 0.5rem 1rem;
   text-decoration: none;
+  font-weight:700;
   color: black;
   margin-right: 1rem;
 }

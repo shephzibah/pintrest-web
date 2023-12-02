@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PinterestIcon from '@material-ui/icons/Pinterest';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
@@ -9,10 +10,14 @@ import FaceIcon from '@material-ui/icons/Face';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 
-
-
 function Header(props) {
     const [input, setInput] = useState("");
+    const navigate = useNavigate();
+
+    const goToProfile = () => {
+        navigate('/profile');
+    };
+
     const onSearchSubmit = (e) => {
         props.preventDefault();
         props.onSubmit(input);
@@ -20,51 +25,51 @@ function Header(props) {
     return (
         <Wrapper>
             <LogoWrapper>
-         <IconButton>
-             <PinterestIcon/>
-         </IconButton>
+                <IconButton>
+                    <PinterestIcon />
+                </IconButton>
             </LogoWrapper>
 
             <HomePageButton>
-             <a href="/">Homepage</a>
+                <a href="/">Homepage</a>
             </HomePageButton>
             <FollowingButton>
-            <a href="/">Following</a>
+                <a href="/">Following</a>
             </FollowingButton>
 
             <SearchWrapper>
                 <SearchBarWrapper>
-                <IconButton>
-                    <SearchIcon/>
-                </IconButton>
-                <form>
-                    <input type="text"  onChange={(e) => console.log(e.target.value)}/>
-                    <button type="submit" onClick={onSearchSubmit}></button>
-                </form>
+                    <IconButton>
+                        <SearchIcon />
+                    </IconButton>
+                    <form>
+                        <input type="text" onChange={(e) => console.log(e.target.value)} />
+                        <button type="submit" onClick={onSearchSubmit}></button>
+                    </form>
                 </SearchBarWrapper>
             </SearchWrapper>
             <IconsWrapper>
-            <IconButton>
-                    <NotificationsIcon/>
+                <IconButton>
+                    <NotificationsIcon />
                 </IconButton>
                 <IconButton>
-                    <TextsmsIcon/>
+                    <TextsmsIcon />
+                </IconButton>
+                <IconButton onClick={goToProfile}>
+                    <FaceIcon />
                 </IconButton>
                 <IconButton>
-                    <FaceIcon/>
-                </IconButton>
-                <IconButton>
-                    <KeyboardArrowDownIcon/>
+                    <KeyboardArrowDownIcon />
                 </IconButton>
             </IconsWrapper>
-            
+
         </Wrapper>
     )
 }
 
 export default Header;
 
-const Wrapper = styled.div `
+const Wrapper = styled.div`
 display: flex;
 align-items: center;
 height: 56px;
@@ -73,7 +78,7 @@ background-color: white;
 color:black;
 `;
 
-const LogoWrapper = styled.div `
+const LogoWrapper = styled.div`
 .MuiSvgIcon-root {
     color:#e60023;
     font-size: 32px;
@@ -119,7 +124,7 @@ const SearchWrapper = styled.div`
 flex: 1;
 `;
 
-const SearchBarWrapper = styled.div `
+const SearchBarWrapper = styled.div`
 background-color: #efefef;
 display: flex;
 height:48px;
@@ -148,6 +153,6 @@ outline:none;
 }
 `;
 
-const IconsWrapper = styled.div `
+const IconsWrapper = styled.div`
 
 `;

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector} from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import NavBar from './HomeNavigation/NavBar';
 import Login from './Login/login';
+import UserProfile from './UserProfile/userprofile';
 import Registration from './Registration/registration';
 import Header from './components/Header';
 import Mainboard from './components/Mainboard';
@@ -78,7 +79,7 @@ function App() {
           <Route path="/login" element={
             <>
               <NavBar />
-              <div className="overlay-text">Sign up to get your ideas</div>
+              <div className="overlay-text">Login to create pins</div>
               <Login />
             </>
           } />
@@ -97,6 +98,16 @@ function App() {
               </>
             ) : (
               <Navigate to="/login" /> // Redirect to login if not authenticated
+            )
+          } />
+          <Route path="/profile" element={
+            authState.isAuthenticated ? ( 
+              <>
+                <Header onSearchSubmit={onSearchSubmit} />
+                <UserProfile />
+              </>
+            ) : (
+              <Navigate to="/login" /> 
             )
           } />
         </Routes>
