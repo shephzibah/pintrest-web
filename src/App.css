@@ -38,41 +38,6 @@
   }
 }
 
-.app-background {
-  background-image: url('./assets/backgroub-img.jpg');
-  display: flex;
-  min-height: 100vh;
-  font-weight: strong;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  opacity: 0.95; 
-}
-
-.app-nav {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.nav-logo {
- 
-}
-
-.nav-item {
-  padding: 8px 16px;
-  border-radius: 20px;
-  text-decoration: none;
-  color: black;
-}
-
-.nav-item.selected {
-  background-color: rgb(219, 40, 40);
-  color: white;
-}
-
 .overlay-text {
   position: absolute;
   top: 50%;
@@ -82,4 +47,5 @@
   color: rgba(173, 73, 73, 0.714);
   font-size: 6em;
   padding-right: 10%;
+  z-index: 10;
 }

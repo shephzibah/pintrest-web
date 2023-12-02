@@ -1,0 +1,23 @@
+{
+    "userId": "user123",
+    "name": "John Doe",
+    "profilePicture": "https://images.unsplash.com/photo-1449614115178-cb924f730780?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy",
+    "posts": [
+      {
+        "id": 1,
+        "title": "Post 1",
+        "image": "https://via.placeholder.com/150"
+      },
+      {
+        "id": 2,
+        "title": "Post 2",
+        "image": "https://images.unsplash.com/photo-1423784346385-c1d4dac9893a"
+      },
+      {
+        "id": 3,
+        "title": "Post 3",
+        "image": "https://images.unsplash.com/photo-1423784346385-c1d4dac9893a"
+      }
+    ]
+  }
+  
