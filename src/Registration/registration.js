@@ -1,8 +1,13 @@
-// Registration.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { registerAction } from './action';
 import './registration.css';
+import { useNavigate } from 'react-router-dom';
+import * as client from './client';
+
+// Toast Message
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Registration() {
   const [firstName, setFirstName] = useState('');
@@ -14,17 +19,37 @@ export default function Registration() {
   // Redux state and dispatch
   const dispatch = useDispatch();
 
-  const handleRegister = (e) => {
-    e.preventDefault();
+  // React Router's useNavigate
+  const navigate = useNavigate();
 
-    dispatch(registerAction({ firstName, lastName, email, password, isSeller }));
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const userDetails = { firstName, lastName, email, password, userrole: isSeller ? 'seller' : 'user' };
+    dispatch(registerAction(userDetails));
+
+    try {
+      const response = await client.signupUser(userDetails);
+        navigate('/login');
+      
+    } catch (error) {
+      toast.error(error.message, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   return (
     <div className="login-container">
+      <ToastContainer />
       <div className="login-card registration-card">
         <form onSubmit={handleRegister}>
-          <div className="name-inputs">
+        <div className="name-inputs">
             <input
               type="text"
               placeholder="First Name"
@@ -66,11 +91,6 @@ export default function Registration() {
           </div>
           <button type="submit" className="login-button registration-button">Register</button>
         </form>
-        <button className="facebook-login">Continue with Facebook</button>
-        <button className="google-login">Continue with Google</button>
-        <div className="alternative-login">
-          <p>Already registered? <a href="/login">Login</a></p>
-        </div>
       </div>
     </div>
   );
