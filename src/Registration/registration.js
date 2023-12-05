@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { registerAction } from './action';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './registration.css';
 
 export default function Registration() {
@@ -20,6 +20,11 @@ export default function Registration() {
 
     dispatch(registerAction({ firstName, lastName, email, password, isSeller }));
     navigate('/preferences');
+  };
+
+  const handleExplore = () => {
+    // Navigate to the Explore page
+    navigate('/explore');
   };
 
   return (
@@ -70,8 +75,12 @@ export default function Registration() {
         </form>
         <button className="facebook-login">Continue with Facebook</button>
         <button className="google-login">Continue with Google</button>
+        
+        {/* Explore button */}
+        <button className="explore-button" onClick={handleExplore}>Explore</button>
+        
         <div className="alternative-login">
-          <p>Already registered? <a href="/login">Login</a></p>
+          <p>Already registered? <Link to="/login">Login</Link></p>
         </div>
       </div>
     </div>

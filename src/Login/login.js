@@ -44,6 +44,11 @@ export default function Login() {
     }
   };
 
+  const handleExplore = () => {
+    // Navigate to the Explore page
+    navigate('/explore');
+  };
+
   return (
     <div className="login-container">
       <ToastContainer />
@@ -68,6 +73,9 @@ export default function Login() {
         </form>
         <button className="facebook-login">Continue with Facebook</button>
         <button className="google-login">Continue with Google</button>
+        
+        {/* Explore button */}
+        <button className="explore-button" onClick={handleExplore}>Explore</button>
       </div>
     </div>
   );
