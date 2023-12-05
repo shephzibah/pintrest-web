@@ -48,6 +48,19 @@ function App() {
         promises.push(
           getImages(pinTerm).then((res) => {
             let results = res.data.results;
+            
+            // Append local image URLs to results
+            const localImages = [
+              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv2.jpg' } },
+              { urls: { regular: process.env.PUBLIC_URL + '/images/carrot.jpg' } },
+              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv3.jpg' } },
+              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv4.jpg' } },
+              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv5.jpg' } },
+              // Add more local images as needed
+            ];
+            
+            results = results.concat(localImages);
+  
             pinData = pinData.concat(results);
   
             pinData.sort(function (a, b) {
@@ -64,6 +77,7 @@ function App() {
   
     getNewPins();
   }, [selectedCategories]);
+  
   
   const handleCategoriesSelected = (categories) => {
     console.log('Selected categories:', categories); // Log the selected categories
