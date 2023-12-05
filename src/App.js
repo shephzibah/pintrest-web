@@ -37,45 +37,62 @@ function App() {
   };
 
   useEffect(() => {
-    const getNewPins = () => {
+    const getNewPins = async () => {
       let promises = [];
       let pinData = [];
-  
-      // Combine default categories with selected categories
-      const allCategories = [...selectedCategories, 'coding', 'makeup', 'street', category].filter(Boolean);
-  
-      // Fetch images from Unsplash API for each category
-      allCategories.forEach((pinTerm) => {
-        promises.push(
-          getImages(pinTerm).then((res) => {
-            let results = res.data.results;
-  
-            // Append local image URLs to results
-            const localImages = [
-              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv2.jpg' } },
-              { urls: { regular: process.env.PUBLIC_URL + '/images/carrot.jpg' } },
-              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv3.jpg' } },
-              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv4.jpg' } },
-              { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv5.jpg' } },
-              // Add more local images as needed
-            ];
-  
-            results = results.concat(localImages);
-  
-            pinData = pinData.concat(results);
-  
-            pinData.sort(function (a, b) {
-              return 0.5 - Math.random();
-            });
-          })
-        );
-      });
-  
-      Promise.all(promises).then(() => {
-        setNewPins(pinData);
-      });
+
+      try {
+        // Fetch posts from the endpoint
+        const response = await axios.get("http://localhost:8000/users/get-posts");
+
+        // Extract data from the response
+        const posts = response.data.data;
+
+        // Combine default categories with selected categories
+        const allCategories = [...selectedCategories, 'coding', 'makeup', 'street', category].filter(Boolean);
+
+        // Fetch images from Unsplash API for each category
+        allCategories.forEach((pinTerm) => {
+          promises.push(
+            getImages(pinTerm).then((res) => {
+              let results = res.data.results;
+
+              // Append local image URLs to results
+              const localImages = [
+                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv2.jpg' } },
+                { urls: { regular: process.env.PUBLIC_URL + '/images/carrot.jpg' } },
+                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv3.jpg' } },
+                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv4.jpg' } },
+                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv5.jpg' } },
+                // Add more local images as needed
+              ];
+
+              // Replace local image URLs with docId from posts
+              results.forEach((result, index) => {
+                if (posts.length > index) {
+                  result.urls.regular = posts[index].docId;
+                }
+              });
+
+              results = results.concat(localImages);
+
+              pinData = pinData.concat(results);
+
+              pinData.sort(function (a, b) {
+                return 0.5 - Math.random();
+              });
+            })
+          );
+        });
+
+        Promise.all(promises).then(() => {
+          setNewPins(pinData);
+        });
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
     };
-  
+
     getNewPins();
   }, [selectedCategories, category]);
   
