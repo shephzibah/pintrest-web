@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { registerAction } from './action';
+import { useNavigate } from 'react-router-dom';
 import './registration.css';
 
 export default function Registration() {
@@ -10,7 +11,7 @@ export default function Registration() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSeller, setIsSeller] = useState(false);
-
+  const navigate = useNavigate();
   // Redux state and dispatch
   const dispatch = useDispatch();
 
@@ -18,6 +19,7 @@ export default function Registration() {
     e.preventDefault();
 
     dispatch(registerAction({ firstName, lastName, email, password, isSeller }));
+    navigate('/preferences');
   };
 
   return (
