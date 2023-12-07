@@ -59,13 +59,12 @@
   color: white;
   cursor: pointer;
   border-radius: 20px;
-  margin-bottom: 1rem; 
 }
 
 
 .login-button {
   background-color: darkred;
-  padding-left: 43.7%;
+  padding-left: 40.7%;
   padding-right: 43.7%;
 }
 
