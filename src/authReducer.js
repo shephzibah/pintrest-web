@@ -1,23 +1,30 @@
-
-import { ActionTypes } from './Login/actions';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isAuthenticated: false,
-  user: null,
-};
+  token: null,
+  isAuthenticated: false
+}
 
-const authReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ActionTypes.LOGIN:
-      // Here you would typically handle the authentication logic,
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload, 
-      };
-    default:
-      return state;
+const authSlice = createSlice({
+  name: "authentication",
+  initialState,
+  reducers: {
+    createToken: (state, action) => {
+      localStorage.setItem('authToken', action.payload);
+
+      state.token = action.payload;
+      state.isAuthenticated = true;
+    },
+    destroyToken: (state, action) => {
+      localStorage.removeItem('authToken');
+
+      state.token = null;
+      state.isAuthenticated = false;
+    }
   }
-};
+});
 
-export default authReducer;
+export const {
+  createToken, destroyToken
+} = authSlice.actions;
+export default authSlice.reducer;

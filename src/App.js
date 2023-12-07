@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
 
-import {useSelector} from 'react-redux';
-import {BrowserRouter as Router, Navigate, Route, Routes, useParams} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+  useParams
+} from 'react-router-dom';
 import NavBar from './HomeNavigation/NavBar';
 import Login from './Login/login';
 import UserProfile from './UserProfile/userprofile';
@@ -11,15 +17,25 @@ import Mainboard from './components/Mainboard';
 import CategorySelection from './preferences/CategorySelection';
 import ExplorePage from './explore/ExplorePage';
 import UserEditProfile from "./UserProfile/userEditProfile";
+import UserEditPassword from "./UserProfile/userEditPassword";
 
 import * as client from './components/client';
 
 import './App.css';
-import UserEditPassword from "./UserProfile/userEditPassword";
+import {createToken} from "./authReducer";
 
 function App() {
+  const dispatch = useDispatch();
+
+  let isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated)
+
+  // Discuss
+  if(localStorage.getItem('authToken')) {
+    isAuthenticated = true;
+    dispatch(createToken(localStorage.getItem('authToken')));
+  }
+
   const [pins, setNewPins] = useState([]);
-  const authState = useSelector(state => state.auth);
   const [redirectToPreferences, setRedirectToPreferences] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]); 
   const { category } = useParams();
@@ -101,7 +117,7 @@ function App() {
   // Call handleCategoriesSelected every time mainboard is loaded
   useEffect(() => {
     handleCategoriesSelected(selectedCategories);
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   return (
     <Router>
@@ -132,7 +148,7 @@ function App() {
             // )
           } />
           <Route path="/profile" element={
-            authState.isAuthenticated ? (
+            isAuthenticated ? (
               <>
                 <Header onSearchSubmit={onSearchSubmit} />
                 <UserProfile />
@@ -142,16 +158,26 @@ function App() {
             )
           } />
           <Route path="/passwordEdit/:userId" element={
-            <>
-              <Header onSearchSubmit={onSearchSubmit} />
-              <UserEditPassword />
-            </>}
+            isAuthenticated ? (
+                <>
+                  <Header onSearchSubmit={onSearchSubmit} />
+                  <UserEditPassword />
+                </>
+            ) : (
+                <Navigate to="/login" />
+            )
+          }
           />
           <Route path="/profileEdit/:userId" element={
-            <>
-              <Header onSearchSubmit={onSearchSubmit} />
-              <UserEditProfile />
-            </>}
+            isAuthenticated ? (
+                <>
+                  <Header onSearchSubmit={onSearchSubmit} />
+                  <UserEditProfile />
+                </>
+            ) : (
+                <Navigate to="/login" />
+            )
+          }
           />
           {redirectToPreferences && <Navigate to="/preferences" />}
           <Route path="/preferences" element={<CategorySelection onCategoriesSelected={setSelectedCategories} />} />
