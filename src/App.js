@@ -138,14 +138,14 @@ function App() {
             </>
           } />
           <Route path="/mainboard" element={
-            // authState.isAuthenticated ? (
+            isAuthenticated ? (
               <>
                 <Header onSearchSubmit={onSearchSubmit} />
                 <Mainboard pins={pins} />
               </>
-            // ) : (
-            //   <Navigate to="/login" />
-            // )
+            ) : (
+              <Navigate to="/login" />
+            )
           } />
           <Route path="/profile" element={
             isAuthenticated ? (
