@@ -1,0 +1,83 @@
+.editProfileContainer {
+    position: absolute;
+    top: 100px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    height: 40%;
+    width: 25%;
+    margin: 20px auto 100px;
+    background-color: #fff;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 2.5px 5px #ccc;
+}
+
+.editProfileContent {
+    min-height: 100%;
+    height: 100%;
+    width: 95%;
+    margin: 12.5% auto;
+    left: 50%;
+    right: 50%;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.editProfileContent label{
+    color: #555;
+    line-height: 2.1em;
+    margin-left: 10px;
+}
+
+.editProfileContent fieldset {
+    border: none;
+    text-align: center;
+    margin-bottom: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.editProfileContent input{
+    font-size: 15px;
+    color: #333;
+    padding: 5px;
+    width: 75%;
+    border: 0.2px solid black;
+    border-radius: 2.5px;
+    transition: 0.3s ease;
+}
+
+.grid-35{
+    width: 38%;
+    float: left;
+    font-weight: 500;
+    color: #333;
+}
+
+.grid-65{
+    position: relative;
+    width: 62%;
+    float: right;
+    font-weight: 300;
+    font-size: 17px;
+}
+
+.editProfileContent .btn {
+    width: 48%;
+    float: left;
+    display: block;
+    margin: 40px auto 40px 1%;
+    padding: 15px 0;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.editProfileContent .cancelBtn {
+    background-color: #DC4C64;
+}
+
+.editProfileContent .editBtn {
+    background-color: #E4A11B;
+}

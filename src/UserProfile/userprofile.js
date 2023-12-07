@@ -7,17 +7,24 @@ import Button from '@material-ui/core/Button';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import UserPins from './userPins'
+import * as client from "./client";
+import {Link} from "react-router-dom";
 
 function UserProfile() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({});
+  const [createdPosts, setCreatedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
 
-  useEffect(() => {
-    
-    fetch('datasets/userdata.json')
-      .then((response) => response.json())
-      .then((data) => setUserData(data))
-      .catch((error) => console.error('Error fetching user data:', error));
+  const userId = 1;
+
+  useEffect(async () => {
+    const profile = await client.profile(userId);
+    const createdPosts = await client.postsCreatedByUser(userId);
+    const savedPosts = await client.postsSavedByUser(userId);
+    setUserData(profile);
+    setCreatedPosts(createdPosts);
+    setSavedPosts(savedPosts);
   }, []);
 
   if (!userData) {
@@ -28,14 +35,22 @@ function UserProfile() {
     <ProfileContainer>
       <AvatarContainer>
         <StyledAvatar src={userData.profilePicture} />
-        <UserName>{userData.name}</UserName>
+        <UserName>{userData.firstName + ' ' + userData.lastName}</UserName>
         <FollowInfo>
           <span>{userData.followers} Followers</span>
           <span>{userData.following} Following</span>
         </FollowInfo>
         <ButtonContainer>
-          <StyledButton variant="outlined" color="primary">Share</StyledButton>
-          <StyledButton variant="outlined" color="primary">Edit Profile</StyledButton>
+          <StyledButton variant="outlined" color="primary">
+            <Link to={`/passwordEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
+              Update password
+            </Link>
+          </StyledButton>
+          <StyledButton variant="outlined" color="primary">
+            <Link to={`/profileEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
+              Edit Profile
+            </Link>
+          </StyledButton>
         </ButtonContainer>
       </AvatarContainer>
       <TabsContainer>
@@ -45,10 +60,10 @@ function UserProfile() {
             <Tab>Saved</Tab>
           </TabList>
           <TabPanel>
-            <UserPins posts={userData.createdPosts} />
+            <UserPins posts={createdPosts} />
           </TabPanel>
           <TabPanel>
-            <UserPins posts={userData.savedPosts} />
+            <UserPins posts={savedPosts} />
           </TabPanel>
         </Tabs>
       </TabsContainer>

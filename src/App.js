@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route, Navigate , useParams} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+
+import {useSelector} from 'react-redux';
+import {BrowserRouter as Router, Navigate, Route, Routes, useParams} from 'react-router-dom';
 import NavBar from './HomeNavigation/NavBar';
 import Login from './Login/login';
 import UserProfile from './UserProfile/userprofile';
@@ -10,7 +10,12 @@ import Header from './components/Header';
 import Mainboard from './components/Mainboard';
 import CategorySelection from './preferences/CategorySelection';
 import ExplorePage from './explore/ExplorePage';
+import UserEditProfile from "./UserProfile/userEditProfile";
+
+import * as client from './components/client';
+
 import './App.css';
+import UserEditPassword from "./UserProfile/userEditPassword";
 
 function App() {
   const [pins, setNewPins] = useState([]);
@@ -18,35 +23,34 @@ function App() {
   const [redirectToPreferences, setRedirectToPreferences] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]); 
   const { category } = useParams();
-  const getImages = (term) => {
-    return axios.get("https://api.unsplash.com/search/photos", {
-      params: { query: term },
-      headers: {
-        Authorization: "Client-ID Y2PGTILvwArhMr02w2yhJges8GixRuM4bs5_hyhtYAw",
-      },
-    });
-  };
 
   const onSearchSubmit = (term) => {
-    getImages(term).then((res) => {
-      let results = res.data.results;
-      let newPins = [...pins, ...results];
+    client.getCategoryImages(term).then((res) => {
+      let newPins = [...res, ...pins];
       newPins.sort(() => 0.5 - Math.random());
       setNewPins(newPins);
     });
   };
 
   useEffect(() => {
-    const getNewPins = async () => {
+    const  getNewPins = async () => {
       let promises = [];
       let pinData = [];
 
       try {
         // Fetch posts from the endpoint
-        const response = await axios.get("http://localhost:8000/users/get-posts");
+        const response = await client.getAllPosts();
 
         // Extract data from the response
-        const posts = response.data.data;
+        let posts = response.data;
+        for(let index = 0; index < posts.length; index ++){
+          let post = posts[index];
+          posts[index] = {
+            "regular": post.docId
+          };
+        }
+
+        pinData = posts;
 
         // Combine default categories with selected categories
         const allCategories = [...selectedCategories, 'coding', 'makeup', 'street', category].filter(Boolean);
@@ -54,29 +58,12 @@ function App() {
         // Fetch images from Unsplash API for each category
         allCategories.forEach((pinTerm) => {
           promises.push(
-            getImages(pinTerm).then((res) => {
-              let results = res.data.results;
-
-              // Append local image URLs to results
-              const localImages = [
-                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv2.jpg' } },
-                { urls: { regular: process.env.PUBLIC_URL + '/images/carrot.jpg' } },
-                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv3.jpg' } },
-                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv4.jpg' } },
-                { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv5.jpg' } },
-                // Add more local images as needed
-              ];
-
+            client.getCategoryImages(pinTerm).then((res) => {
               // Replace local image URLs with docId from posts
-              results.forEach((result, index) => {
-                if (posts.length > index) {
-                  result.urls.regular = posts[index].docId;
-                }
+              res.forEach((result, index) => {
               });
 
-              results = results.concat(localImages);
-
-              pinData = pinData.concat(results);
+              pinData = pinData.concat(res);
 
               pinData.sort(function (a, b) {
                 return 0.5 - Math.random();
@@ -154,6 +141,18 @@ function App() {
               <Navigate to="/login" />
             )
           } />
+          <Route path="/passwordEdit/:userId" element={
+            <>
+              <Header onSearchSubmit={onSearchSubmit} />
+              <UserEditPassword />
+            </>}
+          />
+          <Route path="/profileEdit/:userId" element={
+            <>
+              <Header onSearchSubmit={onSearchSubmit} />
+              <UserEditProfile />
+            </>}
+          />
           {redirectToPreferences && <Navigate to="/preferences" />}
           <Route path="/preferences" element={<CategorySelection onCategoriesSelected={setSelectedCategories} />} />
           <Route path="explore" element={<ExplorePage onCategoriesSelected={handleExploreCategoriesSelected} />} />

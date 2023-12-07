@@ -10,7 +10,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 
-function Header(props) {
+function Header({onSearchSubmit}) {
     const [input, setInput] = useState("");
     const navigate = useNavigate();
 
@@ -18,9 +18,10 @@ function Header(props) {
         navigate('/profile');
     };
 
-    const onSearchSubmit = (e) => {
-        props.preventDefault();
-        props.onSubmit(input);
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        console.log(input);
+        onSearchSubmit(input);
     }
     return (
         <Wrapper>
@@ -43,8 +44,8 @@ function Header(props) {
                         <SearchIcon />
                     </IconButton>
                     <form>
-                        <input type="text" onChange={(e) => console.log(e.target.value)} />
-                        <button type="submit" onClick={onSearchSubmit}></button>
+                        <input type="text" onChange={(e) => setInput(e.target.value)} />
+                        <button type="submit" onClick={handleSearchSubmit}></button>
                     </form>
                 </SearchBarWrapper>
             </SearchWrapper>
