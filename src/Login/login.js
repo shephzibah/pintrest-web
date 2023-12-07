@@ -1,24 +1,25 @@
 // Login.js
 import React, { useState } from 'react';
-import { loginAction } from './actions';
-import { useDispatch } from 'react-redux';
-import './login.css'; // Ensure the file name matches the casing
+import {useDispatch, useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import './login.css';
+
 import * as client from './service';
+
+import {createToken} from "../authReducer";
 
 // Toast Message
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
-  const [email, setEmail] = useState("ekam@g.com");
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState("ekam1@g.com");
   const [password, setPassword] = useState("ekam@g.com");
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  // Redux state and dispatch
-  const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,8 +28,9 @@ export default function Login() {
       const credentials = { email, password };
 
       const response = await client.loginUser(credentials);
+      const token = response.token;
 
-      dispatch(loginAction(credentials));
+      dispatch(createToken(token));
       navigate('/mainboard');
 
     } catch (error) {

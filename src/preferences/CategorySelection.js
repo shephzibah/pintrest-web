@@ -16,7 +16,7 @@ const CategorySelection = ({ onCategoriesSelected }) => {
 
   const handleOKClick = () => {
     // Perform any necessary actions with the selected categories
-    // For example, store them in the state or navigate to /mainboard
+    // For example, index them in the state or navigate to /mainboard
     console.log('Selected Categories:', selectedCategories);
 
     // Pass the selected categories to the parent component

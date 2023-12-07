@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import PinterestIcon from '@material-ui/icons/Pinterest';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
@@ -8,10 +8,14 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import FaceIcon from '@material-ui/icons/Face';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import {useDispatch} from "react-redux";
+import {destroyToken} from "../authReducer";
 
 
 function Header({onSearchSubmit}) {
     const [input, setInput] = useState("");
+
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const goToProfile = () => {
@@ -20,19 +24,30 @@ function Header({onSearchSubmit}) {
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
-        console.log(input);
         onSearchSubmit(input);
+        setInput("");
+        navigate('/mainboard');
     }
+
+    const handleSignout = () => {
+        dispatch(destroyToken());
+        navigate('/login');
+    }
+
     return (
         <Wrapper>
             <LogoWrapper>
                 <IconButton>
-                    <PinterestIcon />
+                    <Link to="/mainboard">
+                        <PinterestIcon />
+                    </Link>
                 </IconButton>
             </LogoWrapper>
 
             <HomePageButton>
-                <a href="/">Homepage</a>
+                <Link to="/mainboard">
+                    Homepage
+                </Link>
             </HomePageButton>
             <FollowingButton>
                 <a href="/">Following</a>
@@ -44,7 +59,7 @@ function Header({onSearchSubmit}) {
                         <SearchIcon />
                     </IconButton>
                     <form>
-                        <input type="text" onChange={(e) => setInput(e.target.value)} />
+                        <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
                         <button type="submit" onClick={handleSearchSubmit}></button>
                     </form>
                 </SearchBarWrapper>
@@ -60,7 +75,7 @@ function Header({onSearchSubmit}) {
                     <FaceIcon />
                 </IconButton>
                 <IconButton>
-                    <KeyboardArrowDownIcon />
+                    <KeyboardArrowDownIcon onClick={handleSignout}/>
                 </IconButton>
             </IconsWrapper>
 

@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { registerAction } from './action';
 import './registration.css';
 import {Link, useNavigate} from 'react-router-dom';
+import {createToken} from "../authReducer";
+
 import * as client from './client';
 
 // Toast Message
@@ -29,6 +31,9 @@ export default function Registration() {
 
         try {
             const response = await client.signupUser(userDetails);
+            const token = response.token;
+
+            dispatch(createToken(token));
             navigate('/preferences');
 
         } catch (error) {

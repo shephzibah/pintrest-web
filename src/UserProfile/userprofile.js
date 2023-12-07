@@ -9,19 +9,26 @@ import 'react-tabs/style/react-tabs.css';
 import UserPins from './userPins'
 import * as client from "./client";
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {jwtDecode} from "jwt-decode";
 
 function UserProfile() {
+  const authToken = useSelector((state) => state.authReducer.token);
+
   const [userData, setUserData] = useState({});
   const [createdPosts, setCreatedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const userId = 1;
+  const [userId, setUserId] = useState();
 
   useEffect(async () => {
-    const profile = await client.profile(userId);
-    const createdPosts = await client.postsCreatedByUser(userId);
-    const savedPosts = await client.postsSavedByUser(userId);
+    let {id} = await jwtDecode(authToken);
+    setUserId(id);
+
+    const profile = await client.profile(id);
+    const createdPosts = await client.postsCreatedByUser(id);
+    const savedPosts = await client.postsSavedByUser(id);
     setUserData(profile);
     setCreatedPosts(createdPosts);
     setSavedPosts(savedPosts);
