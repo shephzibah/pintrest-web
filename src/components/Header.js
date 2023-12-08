@@ -61,6 +61,13 @@ function Header({ onSearchSubmit }) {
         <IconButton onClick={goToProfile}>
           <FaceIcon />
         </IconButton>
+        <IconButton>
+          {/* Add a Link to the desired page where you want to handle the "plus" action */}
+          <Link to="/add">
+            {/* You can use any icon for the plus button, I'm using a simple + sign for demonstration */}
+            <span style={{ fontSize: 28, fontWeight: 'bold' }}>+</span>
+          </Link>
+        </IconButton>
         <LogoutButton onClick={handleSignout}>Logout</LogoutButton>
       </IconsWrapper>
     </Wrapper>

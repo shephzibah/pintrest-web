@@ -12,7 +12,7 @@ import CategorySelection from './preferences/CategorySelection';
 import ExplorePage from './explore/ExplorePage';
 import UserEditProfile from './UserProfile/userEditProfile';
 import UserEditPassword from './UserProfile/userEditPassword';
-
+import AddPinPage from './AddPin/AddPinPage';
 // Import the PinDetail component and styles
 import PinDetail from './details/Details';
 import {
@@ -217,6 +217,7 @@ function App() {
           <Route path="/explore" element={<ExplorePage onCategoriesSelected={handleExploreCategoriesSelected} />} />
           {/* Include the Header component with search functionality */}
           <Route path="/details" element={<PinDetail onSearchSubmit={onSearchSubmit} />} />
+          <Route path="/add" element={<AddPinPage />} />
         </Routes>
       </div>
     </Router>
