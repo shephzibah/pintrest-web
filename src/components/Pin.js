@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-
+import {  Navigate } from 'react-router-dom';
+import {useSelector } from 'react-redux';
 function Pin({ urls }) {
   const navigate = useNavigate();
+  let isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
 
   const handlePinClick = () => {
     // Redirect to the "details" page with the image URL as a query parameter
