@@ -3,17 +3,7 @@ import styled from 'styled-components';
 import Pin from './Pin';
 
 function Mainboard({ pins = [] }) {
-  console.log("Mainboard", pins)
-
-  const handleDownload = (url) => {
-    // Open the image URL in a new tab
-    window.open(url, '_blank');
-  };
-
-  const handleSaveToBoard = (url) => {
-    console.log('Saving to board:', url);
-  };
-
+  console.log(pins);
   return (
     <Wrapper>
       <Container>
@@ -22,8 +12,6 @@ function Mainboard({ pins = [] }) {
             <Pin
               key={index}
               urls={pin}
-              onDownload={() => handleDownload(pin?.regular)}
-              onSaveToBoard={() => handleSaveToBoard(pin?.regular)}
             />
           );
         })}
