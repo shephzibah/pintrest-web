@@ -8,31 +8,48 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import UserPins from './userPins'
 import * as client from "./client";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {jwtDecode} from "jwt-decode";
 
 function UserProfile() {
+  const {profileUserId} = useParams();
+
   const authToken = useSelector((state) => state.authReducer.token);
 
   const [userData, setUserData] = useState({});
   const [createdPosts, setCreatedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
-
   const [userId, setUserId] = useState();
+  const [removeInfo, setRemoveInfo] = useState(false);
 
   useEffect(async () => {
+    let removeEmail = false;
     let {id} = await jwtDecode(authToken);
+
     setUserId(id);
+
+    if(profileUserId) {
+      if(id !== parseInt(profileUserId)) {
+        setRemoveInfo(true);
+        removeEmail = true;
+      }
+      id = profileUserId;
+    }
 
     const profile = await client.profile(id);
     const createdPosts = await client.postsCreatedByUser(id);
     const savedPosts = await client.postsSavedByUser(id);
+
+    if(removeEmail) {
+      profile.email = "";
+    }
+
     setUserData(profile);
     setCreatedPosts(createdPosts);
     setSavedPosts(savedPosts);
-  }, []);
+  }, [profileUserId]);
 
   if (!userData) {
     return <div>Loading...</div>;
@@ -43,22 +60,25 @@ function UserProfile() {
       <AvatarContainer>
         <StyledAvatar src={userData.profilePicture} />
         <UserName>{userData.firstName + ' ' + userData.lastName}</UserName>
+        <Email>{userData.email}</Email>
         <FollowInfo>
           <span>{userData.followers} Followers</span>
           <span>{userData.following} Following</span>
         </FollowInfo>
-        <ButtonContainer>
-          <StyledButton variant="outlined" color="primary">
-            <Link to={`/passwordEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
-              Update password
-            </Link>
-          </StyledButton>
-          <StyledButton variant="outlined" color="primary">
-            <Link to={`/profileEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
-              Edit Profile
-            </Link>
-          </StyledButton>
-        </ButtonContainer>
+        {!removeInfo && (
+            <ButtonContainer>
+              <StyledButton variant="outlined" color="primary">
+                <Link to={`/passwordEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
+                  Update password
+                </Link>
+              </StyledButton>
+              <StyledButton variant="outlined" color="primary">
+                <Link to={`/profileEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
+                  Edit Profile
+                </Link>
+              </StyledButton>
+            </ButtonContainer>
+        )}
       </AvatarContainer>
       <TabsContainer>
         <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
@@ -119,6 +139,14 @@ const UserName = styled.h2`
   font-weight: bold;
   font-size: 24px; 
   margin-top: 20px;
+  margin-bottom: 10px;
+  color: black; 
+`;
+
+const Email = styled.h3`
+  font-weight: bold;
+  font-size: 24px; 
+  margin-top: 5px;
   margin-bottom: 10px;
   color: black; 
 `;

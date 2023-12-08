@@ -42,12 +42,10 @@ function App() {
   let isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
 
   // Check if the user is authenticated and has a token in local storage
-  useEffect(() => {
-    if (localStorage.getItem('authToken')) {
+  if (localStorage.getItem('authToken')) {
       isAuthenticated = true;
       dispatch(createToken(localStorage.getItem('authToken')));
-    }
-  }, [dispatch]);
+  }
 
   const [pins, setNewPins] = useState([]);
   const [redirectToPreferences, setRedirectToPreferences] = useState(false);
@@ -82,7 +80,6 @@ function App() {
         const allCategories = [...selectedCategories, 'coding', 'makeup', 'street', category].filter(Boolean);
 
         allCategories.forEach((pinTerm) => {
-          console.log("pinter,",pinTerm);
           promises.push(
             client.getCategoryImages(pinTerm).then((res) => {
               res.forEach((result, index) => {});
@@ -163,32 +160,37 @@ function App() {
           <Route
             path="/mainboard"
             element={
-              // isAuthenticated ? (
                 <>
-                  <Header onSearchSubmit={onSearchSubmit} />
-                  <Mainboard pins={pins} />
+                    <Header onSearchSubmit={onSearchSubmit} />
+                    <Mainboard pins={pins} />
                 </>
-              // ) : (
-              //   <Navigate to="/login" />
-              // )
             }
           />
           <Route
             path="/profile"
             element={
               isAuthenticated ? (
-                <>
-                  <Header onSearchSubmit={onSearchSubmit} />
-                  <UserProfile />
-                </>
+                  <>
+                      <Header onSearchSubmit={onSearchSubmit} />
+                      <UserProfile />
+                  </>
               ) : (
-                <Navigate to="/login" />
+              <Navigate to="/login" />
+            )
+          } />
+          <Route path="/profile/:profileUserId" element={
+              isAuthenticated ? (
+                  <>
+                      <Header onSearchSubmit={onSearchSubmit} />
+                      <UserProfile />
+                  </>
+              ) : (
+                  <Navigate to="/login" />
               )
             }
           />
-          <Route
-            path="/passwordEdit/:userId"
-            element={
+          <Route path="/passwordEdit/:userId"
+                element={
               isAuthenticated ? (
                 <>
                   <Header onSearchSubmit={onSearchSubmit} />
