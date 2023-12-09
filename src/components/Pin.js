@@ -3,15 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {  Navigate } from 'react-router-dom';
 import {useSelector } from 'react-redux';
+
+import * as client from './client';
+
 function Pin({ urls }) {
   const navigate = useNavigate();
   let isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
 
-  const handlePinClick = () => {
-    // Redirect to the "details" page with the image URL as a query parameter
-    
+  const handlePinClick = async () => {
+    if(!urls.docId) {
+      urls = await client.imageUploadUnsplash({docId: urls.regular});
+    }
+
     isAuthenticated ? (
-      navigate(`/details?imageUrl=${urls?.regular}`)
+      navigate(`/details?docId=${urls?.docId}&postId=${urls.id}&postUserId=${urls.userId}`)
     ) : (
       <Navigate to="/login" />
     )
@@ -44,7 +49,7 @@ const Container = styled.div`
   img {
     display: flex;
     width: 100%;
-    cursor: zoom-in;
+    cursor: pointer;
     border-radius: 16px;
     object-fit: cover;
   }

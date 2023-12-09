@@ -42,6 +42,8 @@ function UserProfile() {
     const createdPosts = await client.postsCreatedByUser(id);
     const savedPosts = await client.postsSavedByUser(id);
 
+    console.log("Saved posts", savedPosts);
+
     if(removeEmail) {
       profile.email = "";
     }
