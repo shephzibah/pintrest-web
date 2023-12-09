@@ -1,0 +1,75 @@
+[
+    {
+      "id": 1,
+      "emailId": "user1@example.com",
+      "title": "Beautiful Landscape Photography",
+      "category": "Photography",
+      "datePosted": "2023-01-01T09:00:00Z",
+      "postStatus": "Approved"
+    },
+    {
+      "id": 2,
+      "emailId": "user2@example.com",
+      "title": "Top 10 DIY Home Decor Ideas",
+      "category": "DIY",
+      "datePosted": "2023-01-15T10:30:00Z",
+      "postStatus": "Pending"
+    },
+    {
+      "id": 3,
+      "emailId": "user3@example.com",
+      "title": "The Best Vegan Recipes",
+      "category": "Food",
+      "datePosted": "2023-02-10T15:45:00Z",
+      "postStatus": "Approved"
+    },
+    {
+      "id": 4,
+      "emailId": "user4@example.com",
+      "title": "Workout Routines for Beginners",
+      "category": "Health & Fitness",
+      "datePosted": "2023-02-20T08:00:00Z",
+      "postStatus": "Approved"
+    },
+    {
+      "id": 5,
+      "emailId": "user5@example.com",
+      "title": "Guide to Budget Travel",
+      "category": "Travel",
+      "datePosted": "2023-03-05T12:15:00Z",
+      "postStatus": "Rejected"
+    },
+    {
+      "id": 6,
+      "emailId": "user6@example.com",
+      "title": "Understanding Cryptocurrency",
+      "category": "Finance",
+      "datePosted": "2023-03-21T17:30:00Z",
+      "postStatus": "Approved"
+    },
+    {
+      "id": 7,
+      "emailId": "user7@example.com",
+      "title": "Mastering the Art of French Cooking",
+      "category": "Cooking",
+      "datePosted": "2023-04-01T14:00:00Z",
+      "postStatus": "Pending"
+    },
+    {
+      "id": 8,
+      "emailId": "user8@example.com",
+      "title": "Sustainable Gardening Tips",
+      "category": "Gardening",
+      "datePosted": "2023-04-15T09:30:00Z",
+      "postStatus": "Approved"
+    },
+    {
+        "id": 9,
+        "emailId": "user9@example.com",
+        "title": "Ferrari",
+        "category": "Automotive",
+        "datePosted": "2023-04-15T09:30:00Z",
+        "postStatus": "Rejected"
+      }
+  ]
+  

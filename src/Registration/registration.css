@@ -14,7 +14,6 @@
     background: #fff;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 40%;
     width: 300px;
     display: flex;
     flex-direction: column;
@@ -30,6 +29,19 @@
     margin-bottom: 1rem;
     border: 1px solid black;
     border-radius: 20px;
+  }
+
+  input[type="text"]::placeholder {
+    text-align: start !important;
+  }
+
+  input[type="text"],
+  input[type="text"]{
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid black;
+    border-radius: 20px;
+    width: 17.5rem;
   }
   
   .registration-card .user-role {

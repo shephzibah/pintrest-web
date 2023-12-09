@@ -8,6 +8,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import UserPins from './userPins'
 import * as client from "./client";
+import SellerItems from '../Seller/SellerItems';
 import {Link, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {jwtDecode} from "jwt-decode";
@@ -86,8 +87,8 @@ function UserProfile() {
         <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
           <TabList>
             <Tab>Created</Tab>
-            
             <Tab>Saved</Tab>
+            {isSeller && <Tab>Seller</Tab>}
           </TabList>
           <TabPanel>
             <UserPins posts={createdPosts} />
@@ -95,9 +96,14 @@ function UserProfile() {
           <TabPanel>
             <UserPins posts={savedPosts} />
           </TabPanel>
+          {isSeller && (
+            <TabPanel>
+              <SellerItems /> 
+            </TabPanel>
+          )}
         </Tabs>
       </TabsContainer>
-    </ProfileContainer>
+    </ProfileContainer >
   );
 }
 
@@ -131,8 +137,8 @@ const ButtonContainer = styled.div`
 `;
 
 const StyledAvatar = styled(Avatar)`
-  width: 180px; 
-  height: 180px;
+  width: 150px !important; 
+  height: 150px !important;
   margin-top: 20px;
   border: 2px solid white; 
 `;

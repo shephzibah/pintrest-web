@@ -44,7 +44,6 @@
   background: #fff;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 40%;
   width: 300px; 
   display: flex;
   flex-direction: column;
@@ -74,8 +73,7 @@ input[type="password"]{
   margin-bottom: 1rem;
   border: 1px solid black;
   border-radius: 20px;
-  padding-left: 25.7%;
-  padding-right: 25.7%;
+  width: 17.5rem;
 }
 
 

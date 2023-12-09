@@ -29,7 +29,7 @@ export default function Login() {
 
       dispatch(createToken(token));
       navigate('/mainboard');
-      window.location.reload(); // Added parentheses here
+      window.location.reload(); 
 
     } catch (error) {
       toast.error('Invalid login credentials', {

@@ -1,53 +1,143 @@
-{
-  "userId": "user123",
-  "name": "John Doe",
-  "followers": 5,
-  "following": 12,
-  "profilePicture": "https://images.unsplash.com/photo-1449614115178-cb924f730780?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy",
-  "savedPosts": [
-    {
-      "id": 1,
-      "title": "Post 1",
-      "description": "Random post 1",
-      "category": "category1",
-      "image": "https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=1080&fit=max%22"
-    },
-    {
-      "id": 2,
-      "title": "Post 2",
-      "description": "Random post 2",
-      "category": "category2",
-      "image": "https://images.unsplash.com/photo-1423784346385-c1d4dac9893a"
-    },
-    {
-      "id": 3,
-      "title": "Post 3",
-      "description": "Random post 3",
-      "category": "category3",
-      "image": "https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
-    }
-  ],
-  "createdPosts": [
-    {
-      "id": 1,
-      "title": "Post 4",
-      "description": "Created post 1",
-      "category": "category1",
-      "image": "https://source.unsplash.com/WLUHO9A_xik/500x500&fit=max"
-    },
-    {
-      "id": 2,
-      "title": "Post 5",
-      "description": "Created post 2",
-      "category": "category2",
-      "image": "https://source.unsplash.com/TCpfPxKPOvk/500x500&fit=max"
-    },
-    {
-      "id": 3,
-      "title": "Post 6",
-      "description": "Created post 3",
-      "category": "category3",
-      "image": "https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
-    }
-  ]
-}
+[
+  {
+    "id": "user123",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "johndoe@example.com",
+    "followers": 5,
+    "following": 12,
+    "role": "admin",
+    "profilePicture": "https://images.unsplash.com/photo-1449614115178-cb924f730780?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy",
+    "savedPosts": [
+      {
+        "id": 1,
+        "title": "Post 1",
+        "description": "Random post 1",
+        "category": "category1",
+        "image": "https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=1080&fit=max"
+      },
+      {
+        "id": 2,
+        "title": "Post 2",
+        "description": "Random post 2",
+        "category": "category2",
+        "image": "https://images.unsplash.com/photo-1423784346385-c1d4dac9893a"
+      },
+      {
+        "id": 3,
+        "title": "Post 3",
+        "description": "Random post 3",
+        "category": "category3",
+        "image": "https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      }
+    ],
+    "createdPosts": [
+      {
+        "id": 4,
+        "title": "Post 4",
+        "description": "Created post 1",
+        "category": "category1",
+        "image": "https://source.unsplash.com/WLUHO9A_xik/500x500&fit=max"
+      },
+      {
+        "id": 5,
+        "title": "Post 5",
+        "description": "Created post 2",
+        "category": "category2",
+        "image": "https://source.unsplash.com/TCpfPxKPOvk/500x500&fit=max"
+      },
+      {
+        "id": 6,
+        "title": "Post 6",
+        "description": "Created post 3",
+        "category": "category3",
+        "image": "https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      }
+    ]
+  },
+  {
+    "id": "user456",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "email": "janesmith@example.com",
+    "followers": 8,
+    "following": 15,
+    "role": "admin",
+    "profilePicture": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-0.3.5&s=3c9819b875af1aeb21ed2e3c8d23d58d&auto=format&fit=crop&w=800&q=60",
+    "savedPosts": [
+      {
+        "id": 7,
+        "title": "Post 7",
+        "description": "Interesting post 1",
+        "category": "category4",
+        "image": "https://images.unsplash.com/photo-1534080564583-6be75777b70a?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      },
+      {
+        "id": 8,
+        "title": "Post 8",
+        "description": "Interesting post 2",
+        "category": "category5",
+        "image": "https://images.unsplash.com/photo-1549388604-817d15aa0110?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      }
+    ],
+    "createdPosts": [
+      {
+        "id": 9,
+        "title": "Post 9",
+        "description": "Creative post 1",
+        "category": "category6",
+        "image": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      },
+      {
+        "id": 10,
+        "title": "Post 10",
+        "description": "Creative post 2",
+        "category": "category7",
+        "image": "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      }
+    ]
+  },
+  {
+    "id": "user789",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "email": "janesmith@example.com",
+    "followers": 8,
+    "following": 15,
+    "role": "user",
+    "profilePicture": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-0.3.5&s=3c9819b875af1aeb21ed2e3c8d23d58d&auto=format&fit=crop&w=800&q=60",
+    "savedPosts": [
+      {
+        "id": 7,
+        "title": "Post 7",
+        "description": "Interesting post 1",
+        "category": "category4",
+        "image": "https://images.unsplash.com/photo-1534080564583-6be75777b70a?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      },
+      {
+        "id": 8,
+        "title": "Post 8",
+        "description": "Interesting post 2",
+        "category": "category5",
+        "image": "https://images.unsplash.com/photo-1549388604-817d15aa0110?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      }
+    ],
+    "createdPosts": [
+      {
+        "id": 9,
+        "title": "Post 9",
+        "description": "Creative post 1",
+        "category": "category6",
+        "image": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      },
+      {
+        "id": 10,
+        "title": "Post 10",
+        "description": "Creative post 2",
+        "category": "category7",
+        "image": "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1?ixid=2yJhcHBfaWQiOjEyMDd9&fm=jpg&q=80"
+      }
+    ]
+  }
+]
+

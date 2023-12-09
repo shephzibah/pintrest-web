@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PinterestIcon from '@material-ui/icons/Pinterest';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import FaceIcon from '@material-ui/icons/Face';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { useDispatch } from 'react-redux';
 import { destroyToken } from '../authReducer';
+import AddIcon from '@material-ui/icons/Add';
 
 function Header({ onSearchSubmit }) {
   const [input, setInput] = useState('');
+  const [userRole, setUserRole] = useState(null);
+  const profileUserId = "user123";
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch user data from local JSON file
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/datasets/userdata.json');
+        const users = await response.json();
+        const currentUser = users.find(user => user.id === profileUserId);
+        if (currentUser) {
+          setUserRole(currentUser.role);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const goToProfile = () => {
     navigate('/profile');
@@ -58,16 +79,17 @@ function Header({ onSearchSubmit }) {
       </SearchWrapper>
 
       <IconsWrapper>
-        <IconButton onClick={goToProfile}>
+        {userRole === 'admin' && (
+          <StyledIconButton component={Link} to="/admin-dashboard">
+            <SettingsIcon />
+          </StyledIconButton>
+        )}
+        <StyledIconButton onClick={goToProfile}>
           <FaceIcon />
-        </IconButton>
-        <IconButton>
-          {/* Add a Link to the desired page where you want to handle the "plus" action */}
-          <Link to="/add">
-            {/* You can use any icon for the plus button, I'm using a simple + sign for demonstration */}
-            <span style={{ fontSize: 28, fontWeight: 'bold' }}>+</span>
-          </Link>
-        </IconButton>
+        </StyledIconButton>
+        <StyledIconButton component={Link} to="/add">
+          <AddIcon />
+        </StyledIconButton>
         <LogoutButton onClick={handleSignout}>Logout</LogoutButton>
       </IconsWrapper>
     </Wrapper>
@@ -146,11 +168,27 @@ const SearchBarWrapper = styled.div`
   
 `;
 
-const IconsWrapper = styled.div``;
+const IconsWrapper = styled.div`
+  padding: 15px;
+`;
+
+const StyledIconButton = styled(IconButton)`
+  &:hover{
+    background: #E60023 !important;
+    color: white; 
+  }
+`;
+
 const LogoutButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
   color: #000;
   font-weight: bold;
+
+  &:hover,
+  &:active {
+    background: #E60023;
+    color: white; 
+  }
 `;

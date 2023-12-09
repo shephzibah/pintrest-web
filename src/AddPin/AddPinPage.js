@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import CloseIcon from '@material-ui/icons/Close';
 
 const AddPinPage = () => {
   const [title, setTitle] = useState('');
@@ -17,6 +18,11 @@ const AddPinPage = () => {
     // Handle image upload logic as needed
     setImage(selectedImage);
   };
+
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
 
   // Function to handle pin submission
   const handlePinSubmit = () => {
@@ -34,13 +40,15 @@ const AddPinPage = () => {
   return (
     <Wrapper>
       <Card>
-        {/* Image Upload Section */}
+        <CloseButton onClick={handleCancel}>
+          <CloseIcon />
+        </CloseButton>
         <ImageUploadSection>
          
           <ImagePreview>
-          <UploadIcon>
-            <PhotoCameraIcon />
-          </UploadIcon>
+            <UploadIcon>
+              <PhotoCameraIcon />
+            </UploadIcon>
             {image ? (
               <img src={URL.createObjectURL(image)} alt="Uploaded" />
             ) : (
@@ -168,7 +176,7 @@ const UserInfo = styled.div`
   align-items: center;
 `;
 
-const ProfileIcon = styled.span`
+const ProfileIcon = styled(IconButton)`
   font-size: 24px;
   margin-right: 10px;
 `;
@@ -196,6 +204,20 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  &:hover,
+  &:active {
+  background: #AE0101;
+  color: white; 
+}
+`;
+
+const CloseButton = styled(IconButton)`
+  position: absolute;
+  top: 10px;
+  right: 10px; 
+  color: #555;
+  font-weight: bold;
 `;
 
 export default AddPinPage;
