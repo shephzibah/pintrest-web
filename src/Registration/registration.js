@@ -1,6 +1,6 @@
 // Registration.js
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { registerAction } from './action';
 import './registration.css';
 
@@ -12,7 +12,6 @@ export default function Registration() {
   const [isSeller, setIsSeller] = useState(false);
 
   // Redux state and dispatch
-  const authState = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const handleRegister = (e) => {
