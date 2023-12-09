@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+
+import * as PinClient from './client';
+
+import { jwtDecode } from 'jwt-decode';
+import { useSelector } from 'react-redux';
+
 
 const AddPinPage = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [image, setImage] = useState(null);
+
+  const [currentUserId, setCurrentUserId] = useState(1);
+
   const navigate = useNavigate();
+
+  const authToken = useSelector((state) => state.authReducer.token);
 
   // Function to handle image upload
   const handleImageUpload = (event) => {
@@ -18,29 +29,62 @@ const AddPinPage = () => {
     setImage(selectedImage);
   };
 
-  // Function to handle pin submission
-  const handlePinSubmit = () => {
-    // Handle pin submission logic using the entered data
-    console.log('Title:', title);
-    console.log('Description:', description);
-    console.log('Category:', category);
-    console.log('Image:', image);
-    // Additional logic for submitting the pin to the server
+  // ui element to close
+  const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 20px;
+  cursor: pointer;
+`;
 
-    // Redirect to mainboard after submitting
+  // Function to handle pin submission
+  const handlePinSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!title.trim() || !image) {
+      alert("Please provide a title and select an image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('category', category);
+
+    try {
+      await PinClient.uploadImage(currentUserId, formData);
+      navigate('/mainboard');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
+  const handleClose = () => {
     navigate('/mainboard');
   };
+
+  // setting current user
+  useEffect(async () => {
+    let { id } = await jwtDecode(authToken);
+    setCurrentUserId(id);
+  }
+    , [])
 
   return (
     <Wrapper>
       <Card>
+        <CloseButton onClick={handleClose}>x</CloseButton>
         {/* Image Upload Section */}
         <ImageUploadSection>
-         
           <ImagePreview>
-          <UploadIcon>
-            <PhotoCameraIcon />
-          </UploadIcon>
+            <UploadIcon>
+              <PhotoCameraIcon />
+            </UploadIcon>
             {image ? (
               <img src={URL.createObjectURL(image)} alt="Uploaded" />
             ) : (
@@ -190,6 +234,7 @@ const CategoryDropdown = styled.select`
 `;
 
 const SubmitButton = styled.button`
+  position: relative;
   background-color: #e60023;
   color: white;
   padding: 10px;
