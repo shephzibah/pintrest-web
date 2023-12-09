@@ -13,24 +13,8 @@ import ExplorePage from './explore/ExplorePage';
 import UserEditProfile from './UserProfile/userEditProfile';
 import UserEditPassword from './UserProfile/userEditPassword';
 import AddPinPage from './AddPin/AddPinPage';
-// Import the PinDetail component and styles
 import PinDetail from './details/Details';
-import {
-  Wrapper,
-  ImageContainer,
-  ImageCard,
-  ContentContainer,
-  DummyText,
-  UserContainer,
-  UserImagePlaceholder,
-  UserInfo,
-  UserName,
-  CommentList,
-  CommentItem,
-  AddCommentForm,
-  ButtonContainer,
-  Button,
-} from './details/detailsStyles';
+import AdminDashboard from './components/AdminDashboard';
 
 import * as client from './components/client';
 import { createToken } from './authReducer';
@@ -159,13 +143,26 @@ function App() {
             }
           />
           <Route
-            path="/mainboard"
-            element={
+            path="/mainboard" element={
+              isAuthenticated ? (
                 <>
-                    <Header onSearchSubmit={onSearchSubmit} />
-                    <Mainboard pins={pins} />
+                  <Header onSearchSubmit={onSearchSubmit} />
+                  <Mainboard pins={pins} />
                 </>
+              ) : (
+                <Navigate to="/login" />
+              )
             }
+          />
+           <Route path="/admin-dashboard" element={
+            isAuthenticated ? (
+              <>
+                <AdminDashboard />
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
           />
           <Route
             path="/profile"
