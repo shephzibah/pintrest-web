@@ -1,115 +1,226 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useSelector} from 'react-redux';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// App.js
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import NavBar from './HomeNavigation/NavBar';
 import Login from './Login/login';
 import UserProfile from './UserProfile/userprofile';
 import Registration from './Registration/registration';
 import Header from './components/Header';
 import Mainboard from './components/Mainboard';
+import CategorySelection from './preferences/CategorySelection';
+import ExplorePage from './explore/ExplorePage';
+import UserEditProfile from './UserProfile/userEditProfile';
+import UserEditPassword from './UserProfile/userEditPassword';
+import AddPinPage from './AddPin/AddPinPage';
+// Import the PinDetail component and styles
+import PinDetail from './details/Details';
+import {
+  Wrapper,
+  ImageContainer,
+  ImageCard,
+  ContentContainer,
+  DummyText,
+  UserContainer,
+  UserImagePlaceholder,
+  UserInfo,
+  UserName,
+  CommentList,
+  CommentItem,
+  AddCommentForm,
+  ButtonContainer,
+  Button,
+} from './details/detailsStyles';
+
+import * as client from './components/client';
+import { createToken } from './authReducer';
+
 import './App.css';
 
 function App() {
-  const [pins, setNewPins] = useState([]);
-  const authState = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+  let isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
 
-  const getImages = (term) => {
-    return axios.get("https://api.unsplash.com/search/photos", {
-      params: { query: term },
-      headers: {
-        Authorization: "Client-ID Y2PGTILvwArhMr02w2yhJges8GixRuM4bs5_hyhtYAw",
-      },
-    });
-  };
+  // Check if the user is authenticated and has a token in local storage
+  if (localStorage.getItem('authToken')) {
+      isAuthenticated = true;
+      dispatch(createToken(localStorage.getItem('authToken')));
+  }
+
+  const [pins, setNewPins] = useState([]);
+  const [redirectToPreferences, setRedirectToPreferences] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const { category } = useParams();
 
   const onSearchSubmit = (term) => {
-    getImages(term).then((res) => {
-      let results = res.data.results;
-      let newPins = [...pins, ...results];
+    client.getCategoryImages(term).then((res) => {
+      let newPins = [...res, ...pins];
       newPins.sort(() => 0.5 - Math.random());
       setNewPins(newPins);
     });
   };
 
   useEffect(() => {
-    const getNewPins = () => {
+    const getNewPins = async () => {
       let promises = [];
       let pinData = [];
-      let pins = ['Istanbul', 'dogs', 'sky', 'apple', 'nature'];
 
-      // Load local images
-      const localImages = [
-        { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv2.jpg' } },
-        { urls: { regular: process.env.PUBLIC_URL + '/images/carrot.jpg' } },
-        { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv3.jpg' } },
-        { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv4.jpg' } },
-        { urls: { regular: process.env.PUBLIC_URL + '/images/carrotv5.jpg' } },
-        // Add more local images as needed
-      ];
+      try {
+        const response = await client.getAllPosts();
+        let posts = response.data;
+        for (let index = 0; index < posts.length; index++) {
+          let post = posts[index];
+          posts[index] = {
+            ...post,
+            regular: post.docId,
+          };
+        }
 
-      pinData = pinData.concat(localImages);
+        pinData = posts;
 
-      // Fetch images from Unsplash API
-      pins.forEach((pinTerm) => {
-        promises.push(
-          getImages(pinTerm).then((res) => {
-            let results = res.data.results;
-            pinData = pinData.concat(results);
+        const allCategories = [...selectedCategories, 'coding', 'makeup', 'street', category].filter(Boolean);
 
-            pinData.sort(function (a, b) {
-              return 0.5 - Math.random();
-            });
-          })
-        );
-      });
+        allCategories.forEach((pinTerm) => {
+          promises.push(
+            client.getCategoryImages(pinTerm).then((res) => {
+              res.forEach((result, index) => {});
+              pinData = pinData.concat(res);
+              pinData.sort(function (a, b) {
+                return 0.5 - Math.random();
+              });
+            })
+          );
+        });
 
-      Promise.all(promises).then(() => {
-        setNewPins(pinData);
-      });
+        Promise.all(promises).then(() => {
+          setNewPins(pinData);
+        });
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
     };
 
     getNewPins();
-  }, []);
+  }, [selectedCategories, category]);
+
+  const handleExploreCategoriesSelected = (categories) => {
+    console.log('Selected categories from ExplorePage:', categories);
+    setSelectedCategories(categories);
+    setNewPins([...categories, 'coding', 'makeup', 'street']);
+  };
+
+  const handleCategoriesSelected = (categories) => {
+    console.log('Selected categories:', categories);
+    setSelectedCategories(categories);
+    setNewPins([...categories, 'coding', 'makeup', 'street']);
+  };
+
+  useEffect(() => {
+    handleCategoriesSelected(selectedCategories);
+  }, [isAuthenticated]);
 
   return (
     <Router>
-      <div className="app">
+      <div className="app" style={{ minHeight: '100vh' }}>
         <Routes>
-          <Route path="/login" element={
-            <>
-              <NavBar />
-              <div className="overlay-text">Login to create pins</div>
-              <Login />
-            </>
-          } />
-          <Route path="/signup" element={
-            <>
-              <NavBar />
-              <div className="overlay-text">Sign up to get your ideas</div>
-              <Registration />
-            </>
-          } />
-          <Route path="/mainboard" element={
-            authState.isAuthenticated ? ( // Check if user is authenticated
+          {/* Add a Route for the default route (/) to redirect to login */}
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/mainboard" />
+              ) : (
+                <>
+                  <NavBar />
+                  <div className="overlay-text">Login to create pins</div>
+                  <Login />
+                </>
+              )
+            }
+          />
+          <Route
+            path="/login"
+            element={
               <>
-                <Header onSearchSubmit={onSearchSubmit} />
-                <Mainboard pins={pins} />
+                <NavBar />
+                <div className="overlay-text">Login to create pins</div>
+                <Login />
               </>
-            ) : (
-              <Navigate to="/login" /> // Redirect to login if not authenticated
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <>
+                <NavBar />
+                <div className="overlay-text">Sign up to get your ideas</div>
+                <Registration />
+              </>
+            }
+          />
+          <Route
+            path="/mainboard"
+            element={
+                <>
+                    <Header onSearchSubmit={onSearchSubmit} />
+                    <Mainboard pins={pins} />
+                </>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              isAuthenticated ? (
+                  <>
+                      <Header onSearchSubmit={onSearchSubmit} />
+                      <UserProfile />
+                  </>
+              ) : (
+              <Navigate to="/login" />
             )
           } />
-          <Route path="/profile" element={
-            authState.isAuthenticated ? ( 
-              <>
-                <Header onSearchSubmit={onSearchSubmit} />
-                <UserProfile />
-              </>
-            ) : (
-              <Navigate to="/login" /> 
-            )
-          } />
+          <Route path="/profile/:profileUserId" element={
+              isAuthenticated ? (
+                  <>
+                      <Header onSearchSubmit={onSearchSubmit} />
+                      <UserProfile />
+                  </>
+              ) : (
+                  <Navigate to="/login" />
+              )
+            }
+          />
+          <Route path="/passwordEdit/:userId"
+                element={
+              isAuthenticated ? (
+                <>
+                  <Header onSearchSubmit={onSearchSubmit} />
+                  <UserEditPassword />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/profileEdit/:userId"
+            element={
+              isAuthenticated ? (
+                <>
+                  <Header onSearchSubmit={onSearchSubmit} />
+                  <UserEditProfile />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {redirectToPreferences && <Navigate to="/preferences" />}
+          <Route path="/preferences" element={<CategorySelection onCategoriesSelected={setSelectedCategories} />} />
+          <Route path="/explore" element={<ExplorePage onCategoriesSelected={handleExploreCategoriesSelected} />} />
+          {/* Include the Header component with search functionality */}
+          <Route path="/details" element={<PinDetail onSearchSubmit={onSearchSubmit} />} />
+          <Route path="/add" element={<AddPinPage />} />
         </Routes>
       </div>
     </Router>

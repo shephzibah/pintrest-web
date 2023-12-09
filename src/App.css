@@ -1,5 +1,14 @@
+/* App.css */
+
+/* Common styles for all screen sizes */
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .App {
   text-align: center;
+  padding: 20px; /* Common padding for all screen sizes */
 }
 
 .App-logo {
@@ -48,4 +57,27 @@
   font-size: 6em;
   padding-right: 10%;
   z-index: 10;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .App {
+    /* Adjust styles for screens with a width less than or equal to 768 pixels */
+    padding: 10px;
+  }
+
+  .App-logo {
+    /* Adjust responsive styles for .App-logo if needed */
+  }
+}
+
+@media (min-width: 769px) {
+  .App {
+    /* Adjust styles for screens with a width greater than 768 pixels */
+    padding: 20px;
+  }
+
+  .App-logo {
+    /* Adjust responsive styles for .App-logo if needed */
+  }
 }

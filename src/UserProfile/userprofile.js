@@ -7,18 +7,51 @@ import Button from '@material-ui/core/Button';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import UserPins from './userPins'
+import * as client from "./client";
+import {Link, useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {jwtDecode} from "jwt-decode";
 
 function UserProfile() {
-  const [userData, setUserData] = useState(null);
-  const [tabIndex, setTabIndex] = useState(0);
+  const {profileUserId} = useParams();
 
-  useEffect(() => {
-    
-    fetch('datasets/userdata.json')
-      .then((response) => response.json())
-      .then((data) => setUserData(data))
-      .catch((error) => console.error('Error fetching user data:', error));
-  }, []);
+  const authToken = useSelector((state) => state.authReducer.token);
+
+  const [userData, setUserData] = useState({});
+  const [createdPosts, setCreatedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [userId, setUserId] = useState();
+  const [removeInfo, setRemoveInfo] = useState(false);
+
+  useEffect(async () => {
+    let removeEmail = false;
+    let {id} = await jwtDecode(authToken);
+
+    setUserId(id);
+
+    if(profileUserId) {
+      if(id !== parseInt(profileUserId)) {
+        setRemoveInfo(true);
+        removeEmail = true;
+      }
+      id = profileUserId;
+    }
+
+    const profile = await client.profile(id);
+    const createdPosts = await client.postsCreatedByUser(id);
+    const savedPosts = await client.postsSavedByUser(id);
+
+    console.log("Saved posts", savedPosts);
+
+    if(removeEmail) {
+      profile.email = "";
+    }
+
+    setUserData(profile);
+    setCreatedPosts(createdPosts);
+    setSavedPosts(savedPosts);
+  }, [profileUserId]);
 
   if (!userData) {
     return <div>Loading...</div>;
@@ -28,27 +61,39 @@ function UserProfile() {
     <ProfileContainer>
       <AvatarContainer>
         <StyledAvatar src={userData.profilePicture} />
-        <UserName>{userData.name}</UserName>
+        <UserName>{userData.firstName + ' ' + userData.lastName}</UserName>
+        <Email>{userData.email}</Email>
         <FollowInfo>
           <span>{userData.followers} Followers</span>
           <span>{userData.following} Following</span>
         </FollowInfo>
-        <ButtonContainer>
-          <StyledButton variant="outlined" color="primary">Share</StyledButton>
-          <StyledButton variant="outlined" color="primary">Edit Profile</StyledButton>
-        </ButtonContainer>
+        {!removeInfo && (
+            <ButtonContainer>
+              <StyledButton variant="outlined" color="primary">
+                <Link to={`/passwordEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
+                  Update password
+                </Link>
+              </StyledButton>
+              <StyledButton variant="outlined" color="primary">
+                <Link to={`/profileEdit/${userId}`} style={{textDecoration: "none", color: "inherit"}}>
+                  Edit Profile
+                </Link>
+              </StyledButton>
+            </ButtonContainer>
+        )}
       </AvatarContainer>
       <TabsContainer>
         <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
           <TabList>
             <Tab>Created</Tab>
+            
             <Tab>Saved</Tab>
           </TabList>
           <TabPanel>
-            <UserPins posts={userData.createdPosts} />
+            <UserPins posts={createdPosts} />
           </TabPanel>
           <TabPanel>
-            <UserPins posts={userData.savedPosts} />
+            <UserPins posts={savedPosts} />
           </TabPanel>
         </Tabs>
       </TabsContainer>
@@ -96,6 +141,14 @@ const UserName = styled.h2`
   font-weight: bold;
   font-size: 24px; 
   margin-top: 20px;
+  margin-bottom: 10px;
+  color: black; 
+`;
+
+const Email = styled.h3`
+  font-weight: bold;
+  font-size: 24px; 
+  margin-top: 5px;
   margin-bottom: 10px;
   color: black; 
 `;

@@ -1,62 +1,89 @@
-// Login.js
 import React, { useState } from 'react';
-import { loginAction } from './actions';
 import { useDispatch } from 'react-redux';
-import './login.css'; // Ensure the file name matches the casing
 import { useNavigate } from 'react-router-dom';
 
+import './login.css';
+
+import * as client from './service';
+
+import { createToken } from '../authReducer';
+
+// Toast Message
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('ekam1@g.com');
+  const [password, setPassword] = useState('ekam@g.com');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Redux state and dispatch
-  const dispatch = useDispatch();
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const response = await fetch('datasets/authorized_users.json');
-    if (!response.ok) {
-      setError(`HTTP error! status: ${response.status}`);
-      return;
-    }
-    const authorizedUsers = await response.json();
 
-    const userExists = authorizedUsers.find(user => user.email === email && user.password === password);
+    try {
+      const credentials = { email, password };
+      const response = await client.loginUser(credentials);
+      const token = response.token;
 
-    if (userExists) {
-      dispatch(loginAction(email, password)); // Dispatching login action to update Redux state
-      navigate('/mainboard'); 
-    } else {
-      setError('Invalid credentials');
+      dispatch(createToken(token));
+      navigate('/mainboard');
+      window.location.reload(); // Added parentheses here
+
+    } catch (error) {
+      toast.error('Invalid login credentials', {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
+  };
+
+  const handleExplore = () => {
+    // Navigate to the Explore page
+    navigate('/explore');
   };
 
   return (
     <div className="login-container">
+      <ToastContainer />
       {error && <p className="error-message">{error}</p>}
       <div className="login-card">
         <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit" className="login-button">Log in</button>
+          <div className="input-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="login-button">
+            Log in
+          </button>
         </form>
         <button className="facebook-login">Continue with Facebook</button>
         <button className="google-login">Continue with Google</button>
+
+        {/* Explore button */}
+        <button className="explore-button" onClick={() => handleExplore()}>
+          Explore
+        </button>
       </div>
     </div>
   );
