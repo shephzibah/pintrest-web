@@ -24,6 +24,7 @@ function UserProfile() {
   const [tabIndex, setTabIndex] = useState(0);
   const [userId, setUserId] = useState();
   const [removeInfo, setRemoveInfo] = useState(false);
+  const isSeller = userData.role === 'seller';
 
   useEffect(async () => {
     let removeEmail = false;
