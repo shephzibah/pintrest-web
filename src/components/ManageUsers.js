@@ -6,6 +6,8 @@ import { green } from '@material-ui/core/colors';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 
+import * as AdminClient from "./client";
+
 const useStyles = makeStyles((theme) => ({
     noShadow: {
       boxShadow: 'none' 
@@ -16,16 +18,13 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const ManageUsers = () => {
-    const classes = useStyles();
     const [users, setUsers] = useState([]);
-    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('/datasets/manage-users.json');
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
+                const response = await AdminClient.getAllUsers();
+                const data = await response.users;
                 setUsers(data);
             } catch (error) {
                 console.error('There has been a problem with your fetch operation:', error);
@@ -35,16 +34,9 @@ const ManageUsers = () => {
         fetchUsers();
     }, []);
 
-    const handleMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleDeleteUser = (userId) => {
-        // Implement delete functionality here
+    const handleDeleteUser = async (userId) => {
+        await AdminClient.deleteUser(userId);
+        window.location.reload();
     };
 
     return (
@@ -55,7 +47,6 @@ const ManageUsers = () => {
                         <TableCell>First Name</TableCell>
                         <TableCell>Last Name</TableCell>
                         <TableCell>Email Address</TableCell>
-                        <TableCell>Last Sign-in</TableCell>
                         <TableCell>Status</TableCell>
                         <TableCell></TableCell>
                     </TableRow>
@@ -65,24 +56,14 @@ const ManageUsers = () => {
                         <TableRow key={user.id}>
                             <TableCell>{user.firstName}</TableCell>
                             <TableCell>{user.lastName}</TableCell>
-                            <TableCell>{user.email}</TableCell>
-                            <TableCell>{new Date(user.lastSignIn).toLocaleString()}</TableCell>
+                            <TableCell>{user.id}</TableCell>
                             <CenteredTableCell>
                                 <StatusIndicator status={user.status} />
                             </CenteredTableCell>
                             <TableCell>
-                                <IconButton aria-label="actions" onClick={handleMenuClick}>
-                                    <MoreVertIcon />
-                                </IconButton>
-                                <Menu
-                                    id="simple-menu"
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleMenuClose}
-                                    classes={{ paper: classes.subtleShadow }}>
-                                    <MenuItem onClick={() => handleDeleteUser(user.id)}>Delete User</MenuItem>
-                                </Menu>
+                                <button onClick={() => handleDeleteUser(user.id)}>
+                                    Delete User
+                                </button>
                             </TableCell>
                         </TableRow>
                     ))}

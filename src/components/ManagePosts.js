@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import styled from 'styled-components';
 
+import * as AdminClient from "./client";
+
 const useStyles = makeStyles((theme) => ({
     noShadow: {
       boxShadow: 'none' 
@@ -25,9 +27,8 @@ const ManagePosts = () => {
     useEffect(() => {
       const fetchPosts = async () => {
         try {
-          const response = await fetch('/datasets/manage-posts.json'); 
-          if (!response.ok) throw new Error('Network response was not ok');
-          const data = await response.json();
+          const response = await AdminClient.getAllPostsAdmin();
+          const data = await response.posts;
           setPosts(data);
         } catch (error) {
           console.error('There has been a problem with your fetch operation:', error);
@@ -37,16 +38,9 @@ const ManagePosts = () => {
       fetchPosts();
     }, []);
 
-    const handleMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleDeletePost = (postId) => {
-        // Implement delete functionality here
+    const handleDeletePost = async (postId) => {
+        await AdminClient.deletePost(postId);
+        window.location.reload();
     };
 
     return (
@@ -54,37 +48,22 @@ const ManagePosts = () => {
                         <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Email Id</TableCell>
+                                    <TableCell>User Name</TableCell>
                                     <TableCell>Title</TableCell>
-                                    <TableCell>Category</TableCell>
-                                    <TableCell>Date Posted</TableCell>
-                                    <TableCell>Community Guidlines</TableCell>
+                                    <TableCell>Description</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {posts.map((post) => (
                                     <TableRow key={post.id}>
-                                        <TableCell>{post.emailId}</TableCell>
-                                        <TableCell>{post.title}</TableCell>
-                                        <TableCell>{post.category}</TableCell>
-                                        <TableCell>{new Date(post.datePosted).toLocaleString()}</TableCell>
-                                        <CenteredTableCell>
-                                            <StatusIndicator status={post.postStatus} />
-                                        </CenteredTableCell>
+                                        <TableCell>{post.user.firstName + ' ' + post.user.lastName}</TableCell>
+                                        <TableCell>{post.imageUpload.title}</TableCell>
+                                        <TableCell>{post.imageUpload.description}</TableCell>
                             <TableCell>
-                                <IconButton aria-label="actions" onClick={handleMenuClick}>
-                                    <MoreVertIcon />
-                                </IconButton>
-                                <Menu
-                                    id="simple-menu"
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleMenuClose}
-                                    classes={{ paper: classes.subtleShadow }}>
-                                    <MenuItem onClick={() => handleDeletePost(post.id)}>Delete Post</MenuItem>
-                                </Menu>
+                                <button onClick={() => handleDeletePost(post.id)}>
+                                    Delete Post
+                                </button>
                             </TableCell>
                         </TableRow>
                     ))}

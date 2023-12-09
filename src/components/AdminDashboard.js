@@ -6,8 +6,12 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ManageUsers from './ManageUsers';
 import ManagePosts from './ManagePosts';
 import { Paper } from '@material-ui/core';
+import {useNavigate} from "react-router-dom";
+import {Description} from "@material-ui/icons";
 
 const AdminDashboard = () => {
+    const navigate = useNavigate();
+
     const [activeTab, setActiveTab] = useState('users');
 
     return (
@@ -25,6 +29,9 @@ const AdminDashboard = () => {
                     onClick={() => setActiveTab('posts')}
                     active={activeTab === 'posts'}>
                     <DescriptionIcon /> Manage Posts
+                </NavItem>
+                <NavItem onClick={() => navigate('/profile')}>
+                    <DescriptionIcon /> Go back
                 </NavItem>
             </Sidebar>
             <MainContent>
