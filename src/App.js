@@ -111,15 +111,7 @@ function App() {
           <Route
             path="/"
             element={
-              isAuthenticated ? (
                 <Navigate to="/mainboard" />
-              ) : (
-                <>
-                  <NavBar />
-                  <div className="overlay-text">Login to create pins</div>
-                  <Login />
-                </>
-              )
             }
           />
           <Route
@@ -144,14 +136,11 @@ function App() {
           />
           <Route
             path="/mainboard" element={
-              isAuthenticated ? (
-                <>
-                  <Header onSearchSubmit={onSearchSubmit} />
+             <>
+                  <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                   <Mainboard pins={pins} />
-                </>
-              ) : (
-                <Navigate to="/login" />
-              )
+              </>
+                
             }
           />
            <Route path="/admin-dashboard" element={
@@ -169,7 +158,7 @@ function App() {
             element={
               isAuthenticated ? (
                   <>
-                      <Header onSearchSubmit={onSearchSubmit} />
+                       <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                       <UserProfile />
                   </>
               ) : (
@@ -179,7 +168,7 @@ function App() {
           <Route path="/profile/:profileUserId" element={
               isAuthenticated ? (
                   <>
-                      <Header onSearchSubmit={onSearchSubmit} />
+                       <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                       <UserProfile />
                   </>
               ) : (
@@ -191,7 +180,7 @@ function App() {
                 element={
               isAuthenticated ? (
                 <>
-                  <Header onSearchSubmit={onSearchSubmit} />
+                   <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                   <UserEditPassword />
                 </>
               ) : (
@@ -204,7 +193,7 @@ function App() {
             element={
               isAuthenticated ? (
                 <>
-                  <Header onSearchSubmit={onSearchSubmit} />
+                   <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                   <UserEditProfile />
                 </>
               ) : (

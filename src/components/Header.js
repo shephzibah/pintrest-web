@@ -1,3 +1,5 @@
+// Header.js
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PinterestIcon from '@material-ui/icons/Pinterest';
@@ -10,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { destroyToken } from '../authReducer';
 import AddIcon from '@material-ui/icons/Add';
 
-function Header({ onSearchSubmit }) {
+function Header({ onSearchSubmit, isAuthenticated }) {
   const [input, setInput] = useState('');
   const [userRole, setUserRole] = useState(null);
   const profileUserId = "user123";
@@ -37,7 +39,13 @@ function Header({ onSearchSubmit }) {
   }, []);
 
   const goToProfile = () => {
-    navigate('/profile');
+    if (isAuthenticated) {
+      navigate('/profile');
+    } else {
+      // User is not logged in, show alert and redirect to login
+      alert('Please login to see your profile.');
+      navigate('/login');
+    }
   };
 
   const handleSearchSubmit = (e) => {
@@ -79,18 +87,22 @@ function Header({ onSearchSubmit }) {
       </SearchWrapper>
 
       <IconsWrapper>
-        {userRole === 'admin' && (
+        {userRole === 'admin' && isAuthenticated && (
           <StyledIconButton component={Link} to="/admin-dashboard">
             <SettingsIcon />
           </StyledIconButton>
         )}
-        <StyledIconButton onClick={goToProfile}>
-          <FaceIcon />
-        </StyledIconButton>
-        <StyledIconButton component={Link} to="/add">
-          <AddIcon />
-        </StyledIconButton>
-        <LogoutButton onClick={handleSignout}>Logout</LogoutButton>
+        {isAuthenticated && (
+          <>
+            <StyledIconButton onClick={goToProfile}>
+              <FaceIcon />
+            </StyledIconButton>
+            <StyledIconButton component={Link} to="/add">
+              <AddIcon />
+            </StyledIconButton>
+            <LogoutButton onClick={handleSignout}>Logout</LogoutButton>
+          </>
+        )}
       </IconsWrapper>
     </Wrapper>
   );
@@ -114,6 +126,7 @@ const LogoWrapper = styled.div`
     cursor: pointer;
   }
 `;
+
 const HomeButtons = styled.div`
   display: flex;
   height: 48px;
@@ -165,7 +178,6 @@ const SearchBarWrapper = styled.div`
   input:focus {
     outline: none;
   }
-  
 `;
 
 const IconsWrapper = styled.div`

@@ -18,7 +18,7 @@ function Pin({ urls }) {
     isAuthenticated ? (
       navigate(`/details?docId=${urls?.docId}&postId=${urls.id}&postUserId=${urls.userId}`)
     ) : (
-      <Navigate to="/login" />
+      navigate("/login")
     )
   };
 
