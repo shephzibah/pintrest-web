@@ -1,7 +1,7 @@
 // Details.js
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+
 import {
   Wrapper,
   ImageContainer,
@@ -21,25 +21,65 @@ import {
 } from './detailsStyles.js';
 import Header from '../components/Header'; // Import the Header component
 
+import * as DetailClient from "./client";
+import * as UserClient from "../UserProfile/client";
+
+import styled from "styled-components";
+import {useSelector} from "react-redux";
+import {jwtDecode} from "jwt-decode";
+import {toast, ToastContainer} from "react-toastify";
+
 function Details() {
+  const authToken = useSelector((state) => state.authReducer.token);
+
   const location = useLocation();
   const navigate = useNavigate();
-  const imageUrl = decodeURIComponent(new URLSearchParams(location.search).get('imageUrl'));
+
+  const params = new URLSearchParams(location.search)
+
+  const docId = params.get('docId');
+  const postId = params.get('postId');
+  const imageUrl = docId;
+  const postUserId = params.get('postUserId');
+
+  const [user, setUser] = useState({});
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [imageData, setImageData] = useState({});
+
+  const [currentUserId, setCurrentUserId] = useState(1);
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(async () => {
+    const details = await DetailClient.getImageDetails(docId, postUserId, postId);
+    setImageData(details.imageUpload);
+    setComments(details.comments);
+    setUser(details.user);
+
+    let {id} = await jwtDecode(authToken);
+    const res = await UserClient.profile(id);
+
+    setCurrentUserId(id);
+    setCurrentUser(res);
+  }, [docId, postUserId])
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
   };
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
     // Add logic to save the comment
     if (comment.trim() !== '') {
       // You can replace the user icon with the actual user profile image
-      const userIcon = <CommentUserImage />;
+      let commentBody = {
+        content: comment,
+        postId,
+        userId: currentUserId
+      }
 
-      setComments([...comments, { userIcon, text: comment }]);
+      await DetailClient.saveComment(commentBody);
+      setComments([...comments, { user: {firstName: currentUser.firstName}, content: comment }]);
       setComment('');
     }
   };
@@ -49,18 +89,38 @@ function Details() {
     window.open(imageUrl, '_blank');
   };
 
-  const handleSavePinClick = () => {
-    // Log the URL of the image
-    console.log('Image URL:', imageUrl);
-    // Add logic to save the pin
-    console.log('Saving Pin...');
+  const handleSavePinClick = async () => {
+    await DetailClient.savePost({
+      postId: postId,
+      userId: currentUserId
+    }).then(() => {
+      toast.success('Post saved!', {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }).catch((err) => {
+      toast.error(err.message, {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
   };
 
   return (
     <>
       <Header onSearchSubmit={(term) => navigate(`/mainboard?q=${term}`)} /> {/* Header with search functionality */}
-
       <Wrapper>
+        <ToastContainer />
         <ImageContainer>
           <ImageCard>
             <img src={imageUrl} alt="pin" />
@@ -71,22 +131,26 @@ function Details() {
           </ButtonContainer>
         </ImageContainer>
         <ContentContainer>
-          <DummyText>About the Pin: This is a dummy text describing the pin.</DummyText>
+          <Title>
+            {imageData.title}
+          </Title>
+          <PinDescription>
+            {imageData.description}
+          </PinDescription>
           <UserContainer>
-            <UserImagePlaceholder />
             <UserInfo>
               {/* Display user information here */}
-              <UserName>User Name</UserName>
+              <UserName>{user.firstName + ' ' + user.lastName}</UserName>
             </UserInfo>
           </UserContainer>
           <CommentList>
-        {comments.map((c, index) => (
-          <StyledCommentItem key={index}>
-            {c.userIcon}
-            <span>{c.text}</span>
-          </StyledCommentItem>
-        ))}
-      </CommentList>
+            {comments.map((c, index) => (
+              <StyledCommentItem key={index}>
+                <b>{c.user ? c.user.firstName : "Anonymous"}:&nbsp;</b>
+                {c.content}<br />
+              </StyledCommentItem>
+            ))}
+          </CommentList>
           <AddCommentForm onSubmit={handleCommentSubmit}>
             <textarea
               placeholder="Add a comment..."
@@ -100,5 +164,21 @@ function Details() {
     </>
   );
 }
+
+const Title = styled.h2`
+  font-weight: bold;
+  font-size: 24px; 
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: black; 
+`;
+
+const PinDescription = styled.h2`
+  font-weight: bold;
+  font-size: 14px; 
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: black; 
+`;
 
 export default Details;

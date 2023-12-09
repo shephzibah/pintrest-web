@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Pin from './Pin';
 
 function Mainboard({ pins = [] }) {
-  console.log(pins);
   return (
     <Wrapper>
       <Container>

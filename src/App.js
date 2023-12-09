@@ -71,6 +71,7 @@ function App() {
         for (let index = 0; index < posts.length; index++) {
           let post = posts[index];
           posts[index] = {
+            ...post,
             regular: post.docId,
           };
         }

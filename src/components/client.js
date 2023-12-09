@@ -18,6 +18,17 @@ export const getCategoryImages = async (term) => {
     }
 }
 
+export const imageUploadUnsplash = async (image) => {
+    try {
+        console.log(image)
+        const response = await axios.post(`${IMAGES_API}/imageUploadUnsplash`, image);
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error.response);
+        throw error.response.data;
+    }
+}
+
 export const getAllPosts = async () => {
     try {
         const response = await axios.get(`${USERS_API}/get-posts`);
