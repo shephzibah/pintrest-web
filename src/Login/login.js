@@ -14,8 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('ekam1@g.com');
-  const [password, setPassword] = useState('ekam@g.com');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 

@@ -7,7 +7,6 @@ function Mainboard({ pins = [] }) {
     <Wrapper>
       <Container>
         {pins.filter(Boolean).map((pin, index) => {
-          console.log("Pin:", pin);
           return (
             <Pin
               key={index}

@@ -13,8 +13,7 @@ function Pin({ urls }) {
   const handlePinClick = async () => {
 
     if (!urls.docId) {
-      //urls = await client.imageUploadUnsplash({ docId: urls.regular });
-      //error here
+      urls = await client.imageUploadUnsplash({ docId: urls.regular });
     }
 
     (isAuthenticated && urls.regular) ? (

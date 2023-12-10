@@ -140,7 +140,9 @@ function Details() {
           <UserContainer>
             <UserInfo>
               {/* Display user information here */}
-              <UserName>{user.firstName + ' ' + user.lastName}</UserName>
+              <Link to={`/profile/${user.id}`}>
+                <UserName>{user.firstName + ' ' + user.lastName}</UserName>
+              </Link>
             </UserInfo>
           </UserContainer>
           <CommentList>
