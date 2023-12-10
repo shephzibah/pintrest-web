@@ -4,6 +4,13 @@ import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import CloseIcon from '@material-ui/icons/Close';
+import { useEffect } from 'react';
+
+import * as PinClient from './client';
+import * as UserClient from '../UserProfile/client';
+
+import { jwtDecode } from 'jwt-decode';
+import { useSelector } from 'react-redux';
 
 const AddPinPage = () => {
   const [title, setTitle] = useState('');
@@ -11,6 +18,13 @@ const AddPinPage = () => {
   const [category, setCategory] = useState('');
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
+
+  // updating the current user
+  const [currentUserId, setCurrentUserId] = useState(1);
+  const [userData, setUserData] = useState({});
+
+  // getting the auth token
+  const authToken = useSelector((state) => state.authReducer.token);
 
   // Function to handle image upload
   const handleImageUpload = (event) => {
@@ -23,16 +37,40 @@ const AddPinPage = () => {
     navigate(-1);
   };
 
+  // setting current user id
+  useEffect(async () => {
+    let { id } = await jwtDecode(authToken);
+    setCurrentUserId(id);
+
+    // setting the current user profile
+    const profile = await UserClient.profile(id);
+    setUserData(profile);
+  }
+    , [])
+
 
   // Function to handle pin submission
-  const handlePinSubmit = () => {
+  const handlePinSubmit = async (e) => {
     // Handle pin submission logic using the entered data
-    console.log('Title:', title);
-    console.log('Description:', description);
-    console.log('Category:', category);
-    console.log('Image:', image);
-    // Additional logic for submitting the pin to the server
+    e.preventDefault();
 
+    if (!title.trim() || !image) {
+      alert("Please provide a title and select an image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('category', category);
+
+    try {
+      await PinClient.uploadImage(currentUserId, formData);
+      navigate('/mainboard');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
     // Redirect to mainboard after submitting
     navigate('/mainboard');
   };
@@ -44,7 +82,7 @@ const AddPinPage = () => {
           <CloseIcon />
         </CloseButton>
         <ImageUploadSection>
-         
+
           <ImagePreview>
             <UploadIcon>
               <PhotoCameraIcon />
@@ -72,8 +110,11 @@ const AddPinPage = () => {
           />
           {/* Display user profile icon and username (you can replace this with actual user data) */}
           <UserInfo>
-            <ProfileIcon>👤</ProfileIcon>
-            <UserName>John Doe</UserName>
+            {userData.profilePicture ?
+              <ProfileIcon src={userData.profilePicture} alt="Profile" /> :
+              <ProfileIcon as="span">👤</ProfileIcon> // Fallback to default icon
+            }
+            <UserName>{userData.firstName} {userData.lastName}</UserName>
           </UserInfo>
           <Textarea
             placeholder="Tell about the pin..."
@@ -176,8 +217,11 @@ const UserInfo = styled.div`
   align-items: center;
 `;
 
-const ProfileIcon = styled(IconButton)`
-  font-size: 24px;
+const ProfileIcon = styled.img`
+  width: 24px; // Adjust size as needed
+  height: 24px; // Adjust size as needed
+  border-radius: 50%; // Make it circular
+  object-fit: cover; // Ensure the image covers the area
   margin-right: 10px;
 `;
 
