@@ -1,8 +1,9 @@
 /* ExplorePage.css */
 
 .explore-page {
+  margin-top: 3rem;
     padding: 20px;
-    text-align: center; /* Center the text */
+    text-align: center; 
   }
   
   .explore-heading {
@@ -29,6 +30,7 @@
     }
   
     .card-content {
+      position: relative;
       padding: 16px;
   
       h2 {
@@ -40,5 +42,23 @@
     &:hover {
       transform: scale(1.05);
     }
+  }
+  
+  
+  .card-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0; /* Adjust padding as needed */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent); /* Gradient overlay */
+    color: white; /* White text color for better readability */
+    text-align: center;
+  }
+  
+  .card-footer h2 {
+    margin: 0;
+    padding: 0 10px; /* Padding on sides to keep the text from touching the edges */
+    font-size: 2rem;
   }
   

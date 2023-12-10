@@ -1,5 +1,5 @@
 // App.js
-import React, { useEffect, useState } from 'react';
+import React, { useLocation, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import NavBar from './HomeNavigation/NavBar';
@@ -27,8 +27,8 @@ function App() {
 
   // Check if the user is authenticated and has a token in local storage
   if (localStorage.getItem('authToken')) {
-      isAuthenticated = true;
-      dispatch(createToken(localStorage.getItem('authToken')));
+    isAuthenticated = true;
+    dispatch(createToken(localStorage.getItem('authToken')));
   }
 
   const [pins, setNewPins] = useState([]);
@@ -67,7 +67,7 @@ function App() {
         allCategories.forEach((pinTerm) => {
           promises.push(
             client.getCategoryImages(pinTerm).then((res) => {
-              res.forEach((result, index) => {});
+              res.forEach((result, index) => { });
               pinData = pinData.concat(res);
               pinData.sort(function (a, b) {
                 return 0.5 - Math.random();
@@ -99,6 +99,21 @@ function App() {
     setNewPins([...categories, 'coding', 'makeup', 'street']);
   };
 
+  function MainboardWrapper() {
+    const { category } = useParams();
+    const [categoryPins, setCategoryPins] = useState([]);
+
+    useEffect(() => {
+      if (category) {
+        client.getCategoryImages(category).then((pins) => {
+          setCategoryPins(pins);
+        });
+      }
+    }, [category]);
+
+    return <Mainboard pins={categoryPins} />;
+  }
+
   useEffect(() => {
     handleCategoriesSelected(selectedCategories);
   }, [isAuthenticated]);
@@ -107,11 +122,22 @@ function App() {
     <Router>
       <div className="app" style={{ minHeight: '100vh' }}>
         <Routes>
-          {/* Add a Route for the default route (/) to redirect to login */}
           <Route
             path="/"
             element={
-                <Navigate to="/mainboard" />
+              <>
+                <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+                <Mainboard pins={pins} />
+              </>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <>
+                <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+                <Mainboard pins={pins} />
+              </>
             }
           />
           <Route
@@ -136,14 +162,17 @@ function App() {
           />
           <Route
             path="/mainboard" element={
-             <>
+              isAuthenticated ? (
+                <>
                   <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                   <Mainboard pins={pins} />
-              </>
-                
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
-           <Route path="/admin-dashboard" element={
+          <Route path="/admin-dashboard" element={
             isAuthenticated ? (
               <>
                 <AdminDashboard />
@@ -157,30 +186,30 @@ function App() {
             path="/profile"
             element={
               isAuthenticated ? (
-                  <>
-                       <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
-                      <UserProfile />
-                  </>
+                <>
+                  <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+                  <UserProfile />
+                </>
               ) : (
+                <Navigate to="/login" />
+              )
+            } />
+          <Route path="/profile/:profileUserId" element={
+            isAuthenticated ? (
+              <>
+                <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+                <UserProfile />
+              </>
+            ) : (
               <Navigate to="/login" />
             )
-          } />
-          <Route path="/profile/:profileUserId" element={
-              isAuthenticated ? (
-                  <>
-                       <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
-                      <UserProfile />
-                  </>
-              ) : (
-                  <Navigate to="/login" />
-              )
-            }
+          }
           />
           <Route path="/passwordEdit/:userId"
-                element={
+            element={
               isAuthenticated ? (
                 <>
-                   <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+                  <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                   <UserEditPassword />
                 </>
               ) : (
@@ -193,7 +222,7 @@ function App() {
             element={
               isAuthenticated ? (
                 <>
-                   <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+                  <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
                   <UserEditProfile />
                 </>
               ) : (
@@ -203,8 +232,21 @@ function App() {
           />
           {redirectToPreferences && <Navigate to="/preferences" />}
           <Route path="/preferences" element={<CategorySelection onCategoriesSelected={setSelectedCategories} />} />
-          <Route path="/explore" element={<ExplorePage onCategoriesSelected={handleExploreCategoriesSelected} />} />
-          {/* Include the Header component with search functionality */}
+          <Route path="/explore" element={
+            <>
+              <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+              <ExplorePage onCategoriesSelected={handleExploreCategoriesSelected} />
+            </>
+          } />
+          <Route
+            path="/explore/:category"
+            element={
+              <>
+                <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
+                <MainboardWrapper />
+              </>
+            }
+          />
           <Route path="/details" element={<PinDetail onSearchSubmit={onSearchSubmit} />} />
           <Route path="/add" element={<AddPinPage />} />
         </Routes>

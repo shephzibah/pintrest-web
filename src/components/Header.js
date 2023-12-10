@@ -70,6 +70,10 @@ function Header({ onSearchSubmit, isAuthenticated }) {
         </IconButton>
       </LogoWrapper>
 
+      <ExplorePageButton>
+        <Link to="/explore">Explore</Link>
+      </ExplorePageButton>
+
       <HomePageButton>
         <Link to="/mainboard">Homepage</Link>
       </HomePageButton>
@@ -103,6 +107,12 @@ function Header({ onSearchSubmit, isAuthenticated }) {
             <LogoutButton onClick={handleSignout}>Logout</LogoutButton>
           </>
         )}
+        {!isAuthenticated && (
+          <div className="nav-right">
+          <StyledLink href="/login" className="nav-item btn btn-login">Login</StyledLink>
+          <StyledLink href="/signup" className="nav-item btn btn-signup">Sign up</StyledLink>
+        </div>
+        )}
       </IconsWrapper>
     </Wrapper>
   );
@@ -117,6 +127,18 @@ const Wrapper = styled.div`
   padding: 12px 4px 4px 16px;
   background-color: white;
   color: black;
+`;
+
+const StyledLink = styled.a`
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  color: black;
+  margin-right: 1rem;
+  border-radius: 24px;
+  font-weight: bold;
+  background-color: ${props => props.className.includes('btn-login') ? '#e60023' : '#efefef'};
+  color: ${props => props.className.includes('btn-login') ? 'white' : 'black'};
 `;
 
 const LogoWrapper = styled.div`
@@ -143,6 +165,14 @@ const HomePageButton = styled(HomeButtons)`
   a {
     text-decoration: none;
     color: white;
+    font-weight: 700;
+  }
+`;
+
+const ExplorePageButton = styled(HomeButtons)`
+  a {
+    text-decoration: none;
+    color: black;
     font-weight: 700;
   }
 `;

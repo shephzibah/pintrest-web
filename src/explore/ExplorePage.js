@@ -18,11 +18,8 @@ const ExplorePage = ({ onCategoriesSelected }) => {
   ];
 
   const handleCardClick = (category) => {
-    // Pass the selected category to the parent component
     onCategoriesSelected([category]);
-
-    // Navigate to Mainboard
-    navigate('/mainboard');
+    navigate(`/explore/${category.toLowerCase()}`);
   };
 
   return (
