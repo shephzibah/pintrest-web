@@ -52,7 +52,11 @@ function Header({ onSearchSubmit, isAuthenticated }) {
     e.preventDefault();
     onSearchSubmit(input);
     setInput('');
-    navigate('/mainboard');
+    if (!isAuthenticated){
+      navigate('/home');
+    } else {
+      navigate('/mainboard');
+    }
   };
 
   const handleSignout = () => {
@@ -75,7 +79,12 @@ function Header({ onSearchSubmit, isAuthenticated }) {
       </ExplorePageButton>
 
       <HomePageButton>
-        <Link to="/mainboard">Homepage</Link>
+        {isAuthenticated && (
+           <Link to="/mainboard">Homepage</Link>
+        )}
+        {!isAuthenticated && (
+           <Link to="/home">Homepage</Link>
+        )}
       </HomePageButton>
 
       <SearchWrapper>

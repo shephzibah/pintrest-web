@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {  Navigate } from 'react-router-dom';
-import {useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import * as client from './client';
 
@@ -11,12 +11,14 @@ function Pin({ urls }) {
   let isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
 
   const handlePinClick = async () => {
-    if(!urls.docId) {
-      urls = await client.imageUploadUnsplash({docId: urls.regular});
+
+    if (!urls.docId) {
+      //urls = await client.imageUploadUnsplash({ docId: urls.regular });
+      //error here
     }
 
-    isAuthenticated ? (
-      navigate(`/details?docId=${urls?.docId}&postId=${urls.id}&postUserId=${urls.userId}`)
+    (isAuthenticated && urls.regular) ? (
+      navigate(`/details?docId=${urls?.regular}&postId=${urls.id}&postUserId=${urls.userId}`)
     ) : (
       navigate("/login")
     )

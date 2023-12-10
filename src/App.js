@@ -87,17 +87,43 @@ function App() {
     getNewPins();
   }, [selectedCategories, category]);
 
-  const handleExploreCategoriesSelected = (categories) => {
-    console.log('Selected categories from ExplorePage:', categories);
-    setSelectedCategories(categories);
-    setNewPins([...categories, 'coding', 'makeup', 'street']);
+  const handleExploreCategoriesSelected = (category) => {
+    console.log('Selected category from ExplorePage:', category);
+    setSelectedCategories(category);
+    const categoriesSet = ['cars', 'pets', 'flowers', 'nature', 'gift', 'pink', 'red', 'rainbow', 'frog', 'coding', 'makeup', 'street'];
+    const shuffledCategories = categoriesSet.sort(() => 0.5 - Math.random());
+    let randomPinSelection = shuffledCategories.slice(0, 7);
+    let shuffledPins = [...category, ...randomPinSelection];
+    setNewPins(shuffledPins);
   };
 
   const handleCategoriesSelected = (categories) => {
     console.log('Selected categories:', categories);
     setSelectedCategories(categories);
-    setNewPins([...categories, 'coding', 'makeup', 'street']);
+    try {
+      let promises = [];
+      let pinData = [];
+      const allCategories = [...categories, 'coding', 'makeup', 'street'];
+      allCategories.forEach((pinTerm) => {
+        promises.push(
+          client.getCategoryImages(pinTerm).then((res) => {
+            res.forEach((result, index) => { });
+            pinData = pinData.concat(res);
+            pinData.sort(function (a, b) {
+              return 0.5 - Math.random();
+            });
+          })
+        );
+      });
+
+      Promise.all(promises).then(() => {
+        setNewPins(pinData);
+      });
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
   };
+
 
   function MainboardWrapper() {
     const { category } = useParams();
@@ -105,9 +131,21 @@ function App() {
 
     useEffect(() => {
       if (category) {
-        client.getCategoryImages(category).then((pins) => {
-          setCategoryPins(pins);
+        client.getCategoryImages(category).then((res) => {
+          setCategoryPins(res);
         });
+      } else {
+        const categoriesSet = ['cars', 'pets', 'flowers', 'nature', 'gift', 'pink', 'red', 'rainbow', 'frog', 'coding', 'makeup', 'street'];
+        const shuffledCategories = categoriesSet.sort(() => 0.5 - Math.random());
+        let randomPinSelection = shuffledCategories.slice(0, 7);
+        Promise.all(randomPinSelection.map(category => client.getCategoryImages(category)))
+          .then(results => {
+            const combinedPins = results.flat();
+            setCategoryPins(combinedPins);
+          })
+          .catch(error => {
+            console.error('Error fetching category images:', error);
+          });
       }
     }, [category]);
 
@@ -127,7 +165,7 @@ function App() {
             element={
               <>
                 <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
-                <Mainboard pins={pins} />
+                <MainboardWrapper />
               </>
             }
           />
@@ -136,7 +174,7 @@ function App() {
             element={
               <>
                 <Header onSearchSubmit={onSearchSubmit} isAuthenticated={isAuthenticated} />
-                <Mainboard pins={pins} />
+                <MainboardWrapper />
               </>
             }
           />
